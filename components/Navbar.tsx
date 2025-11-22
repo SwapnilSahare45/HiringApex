@@ -9,7 +9,6 @@ export default function Navbar() {
   const user = false;
   return (
     <nav className="w-full border-b p-4 flex items-center justify-evenly">
-
       <Image src="/logo7.png" alt="HiringApex" width={60} height={30} />
 
       <ul className="flex gap-4">
@@ -43,14 +42,17 @@ export default function Navbar() {
           </Button>
         ) : (
           <>
-            <Button variant="outline">Login</Button>
-            <Button variant="outline" className="mr-4">Register</Button>
+            <Button asChild variant="outline">
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button asChild variant="outline" className="mr-4">
+              <Link href="/register">Register</Link>
+            </Button>
           </>
         )}
 
         <ModeToggle />
       </div>
-
     </nav>
   );
 }

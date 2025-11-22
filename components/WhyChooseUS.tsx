@@ -31,7 +31,7 @@ export default function WhyChooseUS() {
   ];
   return (
     <section className="w-full pb-8 flex flex-col justify-center items-center gap-4">
-      <TypographyH2>How It Works</TypographyH2>
+      <TypographyH2>Why Choose Us</TypographyH2>
 
       <div className="w-3/4 flex gap-4">
         {reasons.map((reason, idx) => (
