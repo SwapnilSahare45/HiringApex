@@ -18,9 +18,9 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { registerUser } from "@/app/actions/userActions";
-import { userSchema, userSchemaType } from "@/lib/schema/userSchema";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { registerSchema, registerSchemaType } from "@/lib/schema/userSchema";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -47,8 +47,8 @@ export default function RegisterForm() {
   }, [state.success, state.message, router]);
 
   // Initialize react-hook-form
-  const form = useForm<userSchemaType>({
-    resolver: zodResolver(userSchema), // Form validation using zod
+  const form = useForm<registerSchemaType>({
+    resolver: zodResolver(registerSchema), // Form validation using zod
     // Initial state for all fields
     defaultValues: {
       role: "job_seeker",
@@ -66,7 +66,7 @@ export default function RegisterForm() {
     setVisible(!visible);
   };
 
-  const onSubmit = (data: userSchemaType) => {
+  const onSubmit = (data: registerSchemaType) => {
     const formData = new FormData();
 
     // Append values to FormData

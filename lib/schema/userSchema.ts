@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const userSchema = z
+export const registerSchema = z
   .object({
     role: z.enum(["job_seeker", "recruiter"] as const, {
       message: "Please select an account type.",
@@ -68,4 +68,13 @@ export const userSchema = z
     }
   });
 
-export type userSchemaType = z.infer<typeof userSchema>;
+export type registerSchemaType = z.infer<typeof registerSchema>;
+
+export const loginSchema = z.object({
+  email: z.string().trim().email({
+    message: "Please enter a valid email address.",
+  }),
+  password: z.string().min(1, { message: "Password cannot be empty." }),
+});
+
+export type loginSchemaType = z.infer<typeof loginSchema>;

@@ -11,41 +11,60 @@ import {
 import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useState, useActionState, useEffect, startTransition } from "react";
 import { Button } from "./ui/button";
 import { TypographyMuted } from "./ui/typography";
 import Link from "next/link";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const formSchema = z.object({
-  email: z.string().trim().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(1, {
-    message: "Password cannot be empty",
-  }),
-});
-
-type LoginFormValues = z.infer<typeof formSchema>;
+import { loginUser } from "@/app/actions/userActions";
+import { toast } from "sonner";
+import { loginSchema, loginSchemaType } from "@/lib/schema/userSchema";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [visible, setVisible] = useState(false);
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(formSchema),
+  const [state, formAction, isPending] = useActionState(loginUser, {
+    success: false,
+    message: "",
+  });
+
+  useEffect(() => {
+    if (state.success) {
+      if (state.message) {
+        toast.success(state.message);
+      }
+      router.push("/");
+    }
+
+    if (!state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state.success, state.message]);
+
+  const form = useForm<loginSchemaType>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const hadleTogglePasswordVisibility = () => {
+  const togglePassword = () => {
     setVisible(!visible);
   };
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log("Register data:", data);
+  const onSubmit = (data: loginSchemaType) => {
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === "") return;
+      formData.append(key, value as string);
+    });
+    startTransition(() => {
+      formAction(formData);
+    });
   };
 
   return (
@@ -84,7 +103,7 @@ export default function LoginForm() {
                 </FormControl>
                 <div
                   className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                  onClick={hadleTogglePasswordVisibility}
+                  onClick={togglePassword}
                 >
                   {visible ? (
                     <EyeOff className="h-5 w-5 text-muted-foreground" />
@@ -98,8 +117,8 @@ export default function LoginForm() {
           )}
         />
 
-        <Button type="submit" className="w-full mt-4">
-          Login
+        <Button type="submit" className="w-full mt-4" disabled={isPending}>
+          {isPending ? "Logging in..." : "Login"}
         </Button>
       </form>
 
