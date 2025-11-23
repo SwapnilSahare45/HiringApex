@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import Footer from "@/components/Footer";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -20,6 +21,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
+          <Toaster richColors position="top-right" />
           <Footer />
         </ThemeProvider>
       </body>

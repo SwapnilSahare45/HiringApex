@@ -11,89 +11,45 @@ import {
 import { useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { TypographyMuted } from "./ui/typography";
 import Link from "next/link";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-
-const formSchema = z
-  .object({
-    role: z.enum(["job_seeker", "recruiter"] as const, {
-      message: "Please select an account type.",
-    }),
-    username: z
-      .string()
-      .trim()
-      .min(2, {
-        message: "Full Name must be at least 2 characters.",
-      })
-      .max(50, {
-        message: "Full Name must be at most 50 characters.",
-      }),
-    email: z.string().trim().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z
-      .string()
-      .min(1, {
-        message: "Password cannot be empty",
-      })
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/, {
-        message:
-          "Password must be 8+ characters and contain uppercase, lowercase, number, and symbol.",
-      }),
-    confirmPassword: z.string(),
-    companyName: z.string().optional(),
-    companyWebsite: z.string().url().optional().or(z.literal("")),
-    companySize: z.number().optional(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  })
-  .superRefine((data, ctx) => {
-    if (data.role === "recruiter") {
-      if (!data.companyName || data.companyName.trim().length === 0) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Company Name is required for Recruiter accounts.",
-          path: ["companyName"],
-        });
-      }
-
-      if (!data.companyWebsite || data.companyWebsite.trim().length === 0) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Company Website is required for Recruiter accounts.",
-          path: ["companyWebsite"],
-        });
-      }
-
-      if (
-        data.companySize === undefined ||
-        data.companySize === null ||
-        typeof data.companySize !== "number" ||
-        data.companySize <= 0
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Company Size is required for Recruiter accounts.",
-          path: ["companySize"],
-        });
-      }
-    }
-  });
-
-type RegisterFormValues = z.infer<typeof formSchema>;
+import { registerUser } from "@/app/actions/userActions";
+import { userSchema, userSchemaType } from "@/lib/schema/userSchema";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
+  const router = useRouter();
+
   const [visible, setVisible] = useState(false);
 
-  const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(formSchema),
+  // Server action state
+  const [state, formAction, isPending] = useActionState(registerUser, {
+    success: false,
+    message: "",
+  });
+
+  useEffect(() => {
+    if (state.success) {
+      if (state.message) {
+        toast.success(state.message);
+      }
+      router.push("/login");
+    }
+
+    if (!state.success && state.message) {
+      toast.error(state.message);
+    }
+  }, [state.success, state.message, router]);
+
+  // Initialize react-hook-form
+  const form = useForm<userSchemaType>({
+    resolver: zodResolver(userSchema), // Form validation using zod
+    // Initial state for all fields
     defaultValues: {
       role: "job_seeker",
       username: "",
@@ -106,12 +62,33 @@ export default function RegisterForm() {
     },
   });
 
-  const hadleTogglePasswordVisibility = () => {
+  const togglePassword = () => {
     setVisible(!visible);
   };
 
-  const onSubmit = (data: RegisterFormValues) => {
-    console.log("Register data:", data);
+  const onSubmit = (data: userSchemaType) => {
+    const formData = new FormData();
+
+    // Append values to FormData
+    Object.entries(data).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === "") return; // If fields are empty then skip
+
+      // convet number to string
+      if (typeof value === "number") {
+        formData.append(key, String(value));
+        return;
+      }
+
+      formData.append(key, value as string); // Append all values to form data
+    });
+
+    // Run the form action inside startTransition to avoid blocking the UI
+    startTransition(() => {
+      formAction(formData);
+    });
+
+    // reset the form fields
+    form.reset();
   };
 
   const selectedRole = form.watch("role");
@@ -274,7 +251,7 @@ export default function RegisterForm() {
                 </FormControl>
                 <div
                   className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-                  onClick={hadleTogglePasswordVisibility}
+                  onClick={togglePassword}
                 >
                   {visible ? (
                     <EyeOff className="h-5 w-5 text-muted-foreground" />
@@ -307,8 +284,8 @@ export default function RegisterForm() {
           )}
         />
 
-        <Button type="submit" className="w-full mt-4">
-          Register
+        <Button type="submit" className="w-full mt-4" disabled={isPending}>
+          {isPending ? "Registering..." : "Register"}
         </Button>
       </form>
 

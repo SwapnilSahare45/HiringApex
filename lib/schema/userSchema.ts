@@ -1,0 +1,71 @@
+import z from "zod";
+
+export const userSchema = z
+  .object({
+    role: z.enum(["job_seeker", "recruiter"] as const, {
+      message: "Please select an account type.",
+    }),
+    username: z
+      .string()
+      .trim()
+      .min(2, {
+        message: "Full Name must be at least 2 characters.",
+      })
+      .max(50, {
+        message: "Full Name must be at most 50 characters.",
+      }),
+    email: z.string().trim().email({
+      message: "Please enter a valid email address.",
+    }),
+    password: z
+      .string()
+      .min(1, {
+        message: "Password cannot be empty.",
+      })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/, {
+        message:
+          "Password must be 8+ characters and contain uppercase, lowercase, number, and symbol.",
+      }),
+    confirmPassword: z.string(),
+    companyName: z.string().optional(),
+    companyWebsite: z.string().url().optional().or(z.literal("")),
+    companySize: z.number().optional(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match.",
+    path: ["confirmPassword"],
+  })
+  .superRefine((data, ctx) => {
+    if (data.role === "recruiter") {
+      if (!data.companyName || data.companyName.trim().length === 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Company Name is required for Recruiter accounts.",
+          path: ["companyName"],
+        });
+      }
+
+      if (!data.companyWebsite || data.companyWebsite.trim().length === 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Company Website is required for Recruiter accounts.",
+          path: ["companyWebsite"],
+        });
+      }
+
+      if (
+        data.companySize === undefined ||
+        data.companySize === null ||
+        typeof data.companySize !== "number" ||
+        data.companySize <= 0
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Company Size is required for Recruiter accounts.",
+          path: ["companySize"],
+        });
+      }
+    }
+  });
+
+export type userSchemaType = z.infer<typeof userSchema>;
