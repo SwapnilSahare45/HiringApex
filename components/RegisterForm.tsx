@@ -31,20 +31,9 @@ export default function RegisterForm() {
   const [state, formAction, isPending] = useActionState(registerUser, {
     success: false,
     message: "",
+    error: "",
+    errors: {}
   });
-
-  useEffect(() => {
-    if (state.success) {
-      if (state.message) {
-        toast.success(state.message);
-      }
-      router.push("/login");
-    }
-
-    if (!state.success && state.message) {
-      toast.error(state.message);
-    }
-  }, [state.success, state.message, router]);
 
   // Initialize react-hook-form
   const form = useForm<registerSchemaType>({
@@ -61,6 +50,32 @@ export default function RegisterForm() {
       companySize: undefined,
     },
   });
+
+  useEffect(() => {
+
+    if (!state.success && state.errors) {
+      Object.entries(state.errors).forEach(([field, messages]) => {
+        if (messages && messages.length > 0) {
+          form.setError(field as keyof registerSchemaType, {
+            type: 'server',
+            message: messages[0]
+          })
+        }
+      })
+    }
+
+    if (!state.success && state.error) {
+      toast.error(state.error);
+    }
+
+    if (state.success) {
+      if (state.message) {
+        toast.success(state.message);
+      }
+      router.push("/login");
+    }
+
+  }, [state]);
 
   const togglePassword = () => {
     setVisible(!visible);
@@ -82,7 +97,6 @@ export default function RegisterForm() {
       formData.append(key, value as string); // Append all values to form data
     });
 
-    // Run the form action inside startTransition to avoid blocking the UI
     startTransition(() => {
       formAction(formData);
     });

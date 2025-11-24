@@ -1,13 +1,15 @@
 "use server";
 
+import { generateToken } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { loginSchema, registerSchema } from "@/lib/schema/userSchema";
+import { Session } from "@/models/Session";
 import { User } from "@/models/User";
+import { AppResponse } from "@/types/response";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
-import { email, success } from "zod";
 
-export async function registerUser(_: unknown, formData: FormData) {
+export async function registerUser(_: unknown, formData: FormData): Promise<AppResponse> {
   // convert FormData into normal JS object
   const raw = Object.fromEntries(formData);
 
@@ -37,7 +39,7 @@ export async function registerUser(_: unknown, formData: FormData) {
     if (existingUser) {
       return {
         success: false,
-        message: "User already exists.",
+        error: "User already exists.",
       };
     }
 
@@ -63,16 +65,16 @@ export async function registerUser(_: unknown, formData: FormData) {
     console.error(error);
     return {
       success: false,
-      message: "Something went wrong.",
+      error: "Something went wrong.",
     };
   }
 }
 
-export async function loginUser(_: unknown, formData: FormData) {
+export async function loginUser(_: unknown, formData: FormData): Promise<AppResponse> {
   const userData = Object.fromEntries(formData);
 
   const parsed = loginSchema.safeParse(userData);
-  0;
+
   if (!parsed.success) {
     return {
       success: false,
@@ -84,14 +86,14 @@ export async function loginUser(_: unknown, formData: FormData) {
 
   await connectDB();
 
-  const cookieStore = await cookies();
+  const cookie = await cookies();
   try {
     const user = await User.findOne({ email: data.email });
 
     if (!user) {
       return {
         success: false,
-        message: "Invalid Credentials!",
+        error: "Invalid Credentials!",
       };
     }
 
@@ -100,11 +102,13 @@ export async function loginUser(_: unknown, formData: FormData) {
     if (!isPasswordMatch) {
       return {
         success: false,
-        message: "Invalid Credentials!",
+        error: "Invalid Credentials!",
       };
     }
 
-    cookieStore.set("session_id", user.id, {
+    const session = await Session.create({ userId: user.id })
+
+    cookie.set("session_id", generateToken(session.id), {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7,
     });
@@ -112,14 +116,12 @@ export async function loginUser(_: unknown, formData: FormData) {
     return {
       success: true,
       message: "Login successful",
-      username: user.username,
-      email: user.email,
     };
   } catch (error) {
     console.error(error);
     return {
       success: false,
-      message: "Something went wrong.",
+      error: "Something went wrong.",
     };
   }
 }

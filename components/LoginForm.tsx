@@ -28,20 +28,9 @@ export default function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginUser, {
     success: false,
     message: "",
+    error: "",
+    errors: {}
   });
-
-  useEffect(() => {
-    if (state.success) {
-      if (state.message) {
-        toast.success(state.message);
-      }
-      router.push("/");
-    }
-
-    if (!state.success && state.message) {
-      toast.error(state.message);
-    }
-  }, [state.success, state.message]);
 
   const form = useForm<loginSchemaType>({
     resolver: zodResolver(loginSchema),
@@ -50,6 +39,32 @@ export default function LoginForm() {
       password: "",
     },
   });
+
+  useEffect(() => {
+
+    if (!state.success && state.errors) {
+      Object.entries(state.errors).forEach(([field, messages]) => {
+        if (messages && messages.length > 0) {
+          form.setError(field as keyof loginSchemaType, {
+            type: 'server',
+            message: messages[0]
+          })
+        }
+      })
+    }
+
+    if (!state.success && state.error) {
+      toast.error(state.error);
+    }
+
+    if (state.success) {
+      if (state.message) {
+        toast.success(state.message);
+      }
+      router.push("/");
+    }
+
+  }, [state]);
 
   const togglePassword = () => {
     setVisible(!visible);
@@ -62,9 +77,11 @@ export default function LoginForm() {
       if (value === undefined || value === null || value === "") return;
       formData.append(key, value as string);
     });
+
     startTransition(() => {
       formAction(formData);
     });
+
   };
 
   return (

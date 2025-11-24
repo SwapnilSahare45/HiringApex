@@ -4,9 +4,13 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Bell, User } from "lucide-react";
+import { getLoggedInUser } from "@/lib/auth";
 
-export default function Navbar() {
-  const user = false;
+export default async function Navbar() {
+
+  const userResponse = await getLoggedInUser();
+  const user = userResponse.success ? userResponse.data : null;
+
   return (
     <nav className="w-full border-b p-4 flex items-center justify-evenly">
       <Image src="/logo7.png" alt="HiringApex" width={60} height={30} />

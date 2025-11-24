@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { TypographyH1, TypographyMuted } from "@/components/ui/typography";
+import { getLoggedInUser } from "@/lib/auth";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Hero() {
+export default async function Hero() {
+
+  const userResponse = await getLoggedInUser();
+  const user = userResponse.success ? userResponse.data : null;
+
+  console.log(user)
+
   return (
     <section className="w-full flex justify-around items-center py-12">
       <div className="text-center space-y-4">
@@ -13,13 +21,15 @@ export default function Hero() {
           seconds.
         </TypographyMuted>
 
-        <div className="space-x-2 mt-6">
-          <Button variant="outline" size="lg">
-            Get Started
-          </Button>
+        <div className={`mt-6 ${user ? "space-x-0" : "space-x-2"}`}>
+          {!user && (
+            <Button asChild variant="outline" size="lg">
+              <Link href="/register">Get Started</Link>
+            </Button>
+          )}
 
-          <Button variant="outline" size="lg">
-            Browse Jobs
+          <Button asChild variant="outline" size="lg">
+            <Link href="/jobs"> Browse Jobs</Link>
           </Button>
         </div>
       </div>
