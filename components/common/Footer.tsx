@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { TypographyMuted } from "./ui/typography";
+import { TypographyMuted } from "../ui/typography";
 export default function Footer() {
   return (
     <footer className="w-full border-t py-4">

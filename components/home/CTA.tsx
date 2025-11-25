@@ -1,6 +1,6 @@
 import { getLoggedInUser } from "@/lib/auth";
-import { Button } from "./ui/button";
-import { TypographyH2, TypographyBlockquote } from "./ui/typography";
+import { Button } from "../ui/button";
+import { TypographyH2, TypographyBlockquote } from "../ui/typography";
 import Link from "next/link";
 
 export default async function CTA() {

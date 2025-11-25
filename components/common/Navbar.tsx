@@ -1,8 +1,8 @@
-import { ModeToggle } from "@/components/Mode";
+import { ModeToggle } from "@/components/common/Mode";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { Bell, User } from "lucide-react";
 import { getLoggedInUser } from "@/lib/auth";
 

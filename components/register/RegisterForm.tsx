@@ -9,14 +9,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { startTransition, useActionState, useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import { TypographyMuted } from "./ui/typography";
+import { Button } from "../ui/button";
+import { TypographyMuted } from "../ui/typography";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { registerUser } from "@/app/actions/userActions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

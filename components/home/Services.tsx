@@ -1,6 +1,6 @@
 import { Rocket, Target, GlobeLock, ShieldCheck } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { TypographyH2 } from "./ui/typography";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { TypographyH2 } from "../ui/typography";
 
 export default function Services() {
   const services = [

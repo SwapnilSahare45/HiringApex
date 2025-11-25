@@ -9,8 +9,6 @@ export default async function Hero() {
   const userResponse = await getLoggedInUser();
   const user = userResponse.success ? userResponse.data : null;
 
-  console.log(user)
-
   return (
     <section className="w-full flex justify-around items-center py-12">
       <div className="text-center space-y-4">

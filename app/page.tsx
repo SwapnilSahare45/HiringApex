@@ -1,9 +1,9 @@
-import CTA from "@/components/CTA";
-import Features from "@/components/Features";
-import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
-import Services from "@/components/Services";
-import WhyChooseUS from "@/components/WhyChooseUS";
+import CTA from "@/components/home/CTA";
+import Features from "@/components/home/Features";
+import Hero from "@/components/home/Hero";
+import HowItWorks from "@/components/home/HowItWorks";
+import Services from "@/components/home/Services";
+import WhyChooseUS from "@/components/home/WhyChooseUS";
 
 export default function Home() {
   return (
@@ -18,7 +18,7 @@ export default function Home() {
 
       <WhyChooseUS />
 
-      <CTA/>
+      <CTA />
     </>
   );
 }

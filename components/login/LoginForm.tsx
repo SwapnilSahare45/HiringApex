@@ -9,11 +9,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { useState, useActionState, useEffect, startTransition } from "react";
-import { Button } from "./ui/button";
-import { TypographyMuted } from "./ui/typography";
+import { Button } from "../ui/button";
+import { TypographyMuted } from "../ui/typography";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUser } from "@/app/actions/userActions";

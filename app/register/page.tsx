@@ -1,4 +1,4 @@
-import RegisterForm from "@/components/RegisterForm";
+import RegisterForm from "@/components/register/RegisterForm";
 import { TypographyH2, TypographyP } from "@/components/ui/typography";
 
 export default function RegisterPage() {

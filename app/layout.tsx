@@ -1,8 +1,8 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/common/Navbar";
 import "./globals.css";
 
-import { ThemeProvider } from "@/components/theme-provider";
-import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/common/theme-provider";
+import Footer from "@/components/common/Footer";
 import { Toaster } from "sonner";
 
 export default function RootLayout({

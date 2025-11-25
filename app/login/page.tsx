@@ -1,4 +1,4 @@
-import LoginForm from "@/components/LoginForm";
+import LoginForm from "@/components/login/LoginForm";
 import { TypographyH2, TypographyP } from "@/components/ui/typography";
 
 export default function LoginPage() {
