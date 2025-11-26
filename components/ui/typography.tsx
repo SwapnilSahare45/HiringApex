@@ -89,7 +89,7 @@ export function TypographyList({
   className,
 }: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <ul className={cn("my-6 ml-6 list-disc [&>li]:mt-2", className)}>
+    <ul className={cn("my-6 ml-6 list-disc", className)}>
       {children}
     </ul>
   );
