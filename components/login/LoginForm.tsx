@@ -27,7 +27,6 @@ export default function LoginForm() {
 
   const [state, formAction, isPending] = useActionState(loginUser, {
     success: false,
-    message: "",
     error: "",
     errors: {}
   });

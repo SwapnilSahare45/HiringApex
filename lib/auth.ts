@@ -22,7 +22,7 @@ export const verifyToken = (token: string) => {
         const decode = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
         return decode.sessionId;
     } catch (error) {
-        console.log('Invalid token', error);
+        console.log(error);
     }
 };
 
@@ -71,7 +71,7 @@ export const getLoggedInUser = async (): Promise<AppResponse> => {
 
         return {
             success: true,
-            data: user
+            data: JSON.stringify(user)
         }
     } catch (error) {
         console.log(error)

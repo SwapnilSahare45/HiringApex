@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { file } from "zod";
 
 export const registerSchema = z
   .object({
@@ -78,3 +78,25 @@ export const loginSchema = z.object({
 });
 
 export type loginSchemaType = z.infer<typeof loginSchema>;
+
+const fileSchema = z.instanceof(File).or(z.literal(""));
+export const editProfileSchema = z.object({
+  id: z.string(),
+  username: z
+    .string()
+    .trim()
+    .min(2, {
+      message: "Full Name must be at least 2 characters.",
+    })
+    .max(50, {
+      message: "Full Name must be at most 50 characters.",
+    }),
+  headline: z.string().trim().optional(),
+  mobileNo: z
+    .string()
+    .min(10, "Mobile number must be at least 10 digits.")
+    .max(10, "Mobile number cannot exceed 10 digits.")
+    .regex(/^[6-9]\d{9}$/, "Invalid mobile number format. Must be 10 digits."),
+  city: z.string().trim().optional(),
+  avatar: fileSchema.optional(),
+});

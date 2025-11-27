@@ -1,15 +1,23 @@
 "use server";
 
 import { generateToken } from "@/lib/auth";
+import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
-import { loginSchema, registerSchema } from "@/lib/schema/userSchema";
+import {
+  editProfileSchema,
+  loginSchema,
+  registerSchema,
+} from "@/lib/schema/userSchema";
 import { Session } from "@/models/Session";
 import { User } from "@/models/User";
 import { AppResponse } from "@/types/response";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 
-export async function registerUser(_: unknown, formData: FormData): Promise<AppResponse> {
+export async function registerUser(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
   // convert FormData into normal JS object
   const raw = Object.fromEntries(formData);
 
@@ -70,7 +78,10 @@ export async function registerUser(_: unknown, formData: FormData): Promise<AppR
   }
 }
 
-export async function loginUser(_: unknown, formData: FormData): Promise<AppResponse> {
+export async function loginUser(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
   const userData = Object.fromEntries(formData);
 
   const parsed = loginSchema.safeParse(userData);
@@ -106,7 +117,7 @@ export async function loginUser(_: unknown, formData: FormData): Promise<AppResp
       };
     }
 
-    const session = await Session.create({ userId: user.id })
+    const session = await Session.create({ userId: user.id });
 
     cookie.set("session_id", generateToken(session.id), {
       httpOnly: true,
@@ -119,6 +130,73 @@ export async function loginUser(_: unknown, formData: FormData): Promise<AppResp
     };
   } catch (error) {
     console.error(error);
+    return {
+      success: false,
+      error: "Something went wrong.",
+    };
+  }
+}
+
+async function bufferToDataUrl(file: File): Promise<string> {
+  const fileBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(fileBuffer);
+  return `data:${file.type};base64,${buffer.toString("base64")}`;
+}
+
+export async function editProfile(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
+  const rawData = Object.fromEntries(formData);
+  const parsed = editProfileSchema.safeParse(rawData);
+  if (!parsed.success) {
+    return {
+      success: false,
+      errors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  const data = parsed.data;
+
+  await connectDB();
+  try {
+    const user = await User.findById(data.id).select("-password -__v");
+    if (!user) {
+      return {
+        success: false,
+        error: "User not found.",
+      };
+    }
+
+    let avatarUrl = user.avatar;
+
+    if (data.avatar instanceof File && data.avatar.size > 0) {
+      const fileDataUrl = await bufferToDataUrl(data.avatar);
+
+      const uploadResponse = await cloudinary.uploader.upload(fileDataUrl, {
+        folder: `hiring_apex/avatars`,
+        public_id: `user-${user.id}`,
+        overwrite: true,
+        format: "webp",
+      });
+
+      avatarUrl = uploadResponse.secure_url;
+    }
+    user.username = data.username;
+    user.headline = data.headline;
+    user.mobileNo = data.mobileNo;
+    user.city = data.city;
+    user.avatar = avatarUrl;
+
+    await user.save();
+
+    return {
+      success: true,
+      data: JSON.stringify(user),
+      message: "Profile updated successfully!",
+    };
+  } catch (error) {
+    console.log(error);
     return {
       success: false,
       error: "Something went wrong.",

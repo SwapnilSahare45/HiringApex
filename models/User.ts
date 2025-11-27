@@ -19,6 +19,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     requierd: true,
   },
+  avatar: {
+    type: String,
+  },
+  headline: {
+    type: String,
+  },
+  mobileNo: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
   companyName: {
     type: String,
   },

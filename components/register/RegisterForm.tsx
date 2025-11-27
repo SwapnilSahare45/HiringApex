@@ -30,7 +30,6 @@ export default function RegisterForm() {
   // Server action state
   const [state, formAction, isPending] = useActionState(registerUser, {
     success: false,
-    message: "",
     error: "",
     errors: {}
   });
