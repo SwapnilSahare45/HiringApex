@@ -5,11 +5,16 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Bell, User } from "lucide-react";
 import { getLoggedInUser } from "@/lib/auth";
+import { LoggedInUser } from "@/types/loggedInUser";
 
 export default async function Navbar() {
-
   const userResponse = await getLoggedInUser();
-  const user = userResponse.success ? userResponse.data : null;
+
+  if (!userResponse.success) {
+    return <p>User profile not load.</p>;
+  }
+
+  const user = JSON.parse(userResponse.data as string) as LoggedInUser;
 
   return (
     <nav className="w-full border-b p-4 flex items-center justify-evenly">
@@ -41,8 +46,20 @@ export default async function Navbar() {
 
       <div className="flex justify-center items-center gap-2">
         {user ? (
-          <Button variant="outline" size="icon">
-            <User />
+          <Button asChild size="icon" variant="outline">
+            <Link href="profile">
+              {user.avatar ? (
+                <Image
+                  src={user.avatar}
+                  alt={`${user.username}'s avatar`}
+                  width={36}
+                  height={36}
+                  className="object-cover rounded-md"
+                />
+              ) : (
+                <User />
+              )}
+            </Link>
           </Button>
         ) : (
           <>

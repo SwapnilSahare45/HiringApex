@@ -14,17 +14,13 @@ import {
 import { Input } from "../ui/input";
 import Image from "next/image";
 import { Label } from "../ui/label";
-import { LoggedInUser } from "@/types/loggedInUser";
 import { editProfile } from "@/app/actions/userActions";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LoggedInUserProps } from "@/types/loggedInUser";
 
-interface EditProfileProps {
-  user: LoggedInUser;
-}
-
-export default function EditProfile({ user }: EditProfileProps) {
+export default function EditProfile({ user }: LoggedInUserProps) {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -42,13 +38,6 @@ export default function EditProfile({ user }: EditProfileProps) {
       router.refresh();
     } else if (state.error) {
       toast.error(state.error);
-    } else if (state.errors) {
-      toast.error(
-        state.errors.username ||
-          state.errors.headline ||
-          state.errors.mobileNo ||
-          state.errors.city
-      );
     }
   }, [state]);
 

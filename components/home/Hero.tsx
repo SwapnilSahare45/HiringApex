@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function Hero() {
-
   const userResponse = await getLoggedInUser();
   const user = userResponse.success ? userResponse.data : null;
 
@@ -36,8 +35,8 @@ export default async function Hero() {
         <Image
           src="./job_offers.svg"
           alt="Job offers Illustrations"
-          layout="fill"
-          objectFit="cover"
+          fill={true}
+          style={{ objectFit: "contain" }}
         />
       </div>
     </section>

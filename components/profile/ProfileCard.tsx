@@ -4,29 +4,25 @@ import {
   TypographyList,
   TypographyMuted,
 } from "../ui/typography";
-import { getLoggedInUser } from "@/lib/auth";
 import Image from "next/image";
 import EditProfile from "./EditProfile";
 import { LoggedInUser } from "@/types/loggedInUser";
 
-export default async function ProfileCard() {
-  const userResponse = await getLoggedInUser();
+interface LoggedInUserProps {
+  user: LoggedInUser;
+}
 
-  if (!userResponse.success) {
-    return <p>User profile not load.</p>;
-  }
-
-  const user = JSON.parse(userResponse.data as string) as LoggedInUser;
-
+export default async function ProfileCard({ user }: LoggedInUserProps) {
   return (
     <section className="w-4/5 border flex justify-between items-center px-12 py-6 rounded-xl shadow">
-      <div className="flex gap-6">
-        <p className="w-16 h-16 border rounded-full relative overflow-hidden">
+      <div className="flex items-center gap-6">
+        <p className="w-24 h-24 border rounded-full relative overflow-hidden">
           {user.avatar ? (
             <Image
               src={user.avatar}
               alt={`${user.username}'s avatar`}
               fill={true}
+              quality={100}
               sizes="64px"
               className="object-cover"
             />

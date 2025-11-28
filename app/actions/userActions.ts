@@ -8,6 +8,7 @@ import {
   loginSchema,
   registerSchema,
 } from "@/lib/schema/userSchema";
+import { Resume } from "@/models/Resume";
 import { Session } from "@/models/Session";
 import { User } from "@/models/User";
 import { AppResponse } from "@/types/response";
@@ -200,6 +201,68 @@ export async function editProfile(
     return {
       success: false,
       error: "Something went wrong.",
+    };
+  }
+}
+
+export async function uploadResume(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
+  const data = Object.fromEntries(formData);
+  await connectDB();
+
+  try {
+    const user = await User.findById(data.id).select("id");
+    if (!user) {
+      return {
+        success: false,
+        error: "User not found.",
+      };
+    }
+
+    let resumeFile;
+
+    if (data.resumeFile instanceof File && data.resumeFile.size > 0) {
+      const fileDataUrl = await bufferToDataUrl(data.resumeFile);
+
+      const uploadResponse = await cloudinary.uploader.upload(fileDataUrl, {
+        folder: `hiring_apex/resumes`,
+        public_id: `user-${user.id}-resume`,
+        overwrite: true,
+        resource_type: "raw",
+      });
+
+      resumeFile = uploadResponse.secure_url;
+    }
+
+    const resume = await Resume.findOne({ user: user.id });
+
+    if (resume) {
+      resume.user = user.id;
+      resume.resumeFile = resumeFile;
+      resume.save();
+
+      return {
+        success: true,
+        message: "Resume updated successfully.",
+      };
+    } else {
+      Resume.create({
+        user: user.id,
+        resumeFile,
+      });
+
+      return {
+        success: true,
+        message: "Resume uploaded successfully.",
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: "Something went wrong",
     };
   }
 }
