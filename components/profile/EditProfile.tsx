@@ -18,9 +18,13 @@ import { editProfile } from "@/app/actions/userActions";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { LoggedInUserProps } from "@/types/loggedInUser";
+import { LoggedInUser } from "@/types/loggedInUser";
 
-export default function EditProfile({ user }: LoggedInUserProps) {
+interface EditProfileProps {
+  user: LoggedInUser;
+}
+
+export default function EditProfile({ user }: EditProfileProps) {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);

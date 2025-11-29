@@ -1,6 +1,6 @@
 "use server";
 
-import { generateToken } from "@/lib/auth";
+import { generateToken, getLoggedInUser } from "@/lib/auth";
 import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
 import {
@@ -263,6 +263,48 @@ export async function uploadResume(
     return {
       success: false,
       error: "Something went wrong",
+    };
+  }
+}
+
+export async function addSkills(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
+  const data = Object.fromEntries(formData);
+  const { userId, skills } = data;
+  const skillsString = skills && typeof skills === "string" ? skills : "";
+  const skillsArray = skillsString
+    ? skillsString
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter((s: string) => s.length > 0)
+    : [];
+  await connectDB();
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: { skills: skillsArray } },
+      { new: true }
+    );
+
+    console.log(updatedUser);
+
+    if (!updatedUser) {
+      return {
+        success: false,
+        error: "User not found",
+      };
+    }
+    return {
+      success: true,
+      message: "Successfully save skills.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: "Something went wrong.",
     };
   }
 }

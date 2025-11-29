@@ -22,7 +22,7 @@ export default async function ProfilePage() {
 
       <ResumeCard user={user} />
 
-      <SkillsCard />
+      <SkillsCard user={user} />
 
       <ExperienceCard />
 

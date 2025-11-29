@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
   city: {
     type: String,
   },
+  skills: {
+    type: [String],
+    default: [],
+  },
   companyName: {
     type: String,
   },
