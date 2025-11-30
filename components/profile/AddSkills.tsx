@@ -22,10 +22,11 @@ import { toast } from "sonner";
 
 interface AddSkillsProps {
   userId: string;
+  prevSkills: string[];
 }
 
-export default function AddSkills({ userId }: AddSkillsProps) {
-  const [skills, setSkills] = useState<string[]>([]);
+export default function AddSkills({ userId, prevSkills }: AddSkillsProps) {
+  const [skills, setSkills] = useState<string[]>(prevSkills || []);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
@@ -71,7 +72,6 @@ export default function AddSkills({ userId }: AddSkillsProps) {
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
-      setSkills([]);
       setOpen(false);
     } else if (state.error) {
       toast.error(state.error);

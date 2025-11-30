@@ -1,5 +1,36 @@
 import mongoose from "mongoose";
 
+const experienceSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    company: {
+      type: String,
+      required: true,
+    },
+    location: {
+      type: String,
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    endDate: {
+      type: Date,
+    },
+    description: {
+      type: String,
+    },
+    isCurrent: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { _id: true }
+);
+
 const userSchema = new mongoose.Schema({
   role: {
     type: String,
@@ -12,12 +43,12 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    requierd: true,
+    required: true,
     unique: true,
   },
   password: {
     type: String,
-    requierd: true,
+    required: true,
   },
   avatar: {
     type: String,
@@ -33,6 +64,10 @@ const userSchema = new mongoose.Schema({
   },
   skills: {
     type: [String],
+    default: [],
+  },
+  experience: {
+    type: [experienceSchema],
     default: [],
   },
   companyName: {

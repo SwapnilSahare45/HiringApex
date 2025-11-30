@@ -13,6 +13,7 @@ import { Session } from "@/models/Session";
 import { User } from "@/models/User";
 import { AppResponse } from "@/types/response";
 import bcrypt from "bcrypt";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function registerUser(
@@ -253,6 +254,8 @@ export async function uploadResume(
         resumeFile,
       });
 
+      revalidatePath("/profile");
+
       return {
         success: true,
         message: "Resume uploaded successfully.",
@@ -288,7 +291,56 @@ export async function addSkills(
       { new: true }
     );
 
-    console.log(updatedUser);
+    if (!updatedUser) {
+      return {
+        success: false,
+        error: "User not found",
+      };
+    }
+
+    revalidatePath("/profile");
+
+    return {
+      success: true,
+      message: "Successfully save skills.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: "Something went wrong.",
+    };
+  }
+}
+
+export async function addExperience(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
+  const data = Object.fromEntries(formData);
+  await connectDB();
+
+  const isCurrent = data.isCurrent === "on";
+
+  const newExperience = {
+    title: data.title,
+    company: data.company,
+    location: data.location,
+    startDate: new Date(data.startDate.toString()),
+    endDate: isCurrent
+      ? null
+      : data.endDate
+      ? new Date(data.endDate.toString())
+      : null,
+    description: data.description,
+    isCurrent: isCurrent,
+  };
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      data.userId,
+      { $push: { experience: newExperience } },
+      { new: true, runValidators: true }
+    );
 
     if (!updatedUser) {
       return {
@@ -296,9 +348,12 @@ export async function addSkills(
         error: "User not found",
       };
     }
+
+    revalidatePath("/profile");
+
     return {
       success: true,
-      message: "Successfully save skills.",
+      message: "Experience added successfully.",
     };
   } catch (error) {
     console.log(error);

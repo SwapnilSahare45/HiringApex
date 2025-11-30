@@ -1,26 +1,15 @@
-import { Brain, CirclePlus } from "lucide-react";
+import { Brain } from "lucide-react";
 import { TypographyH4, TypographyList } from "../ui/typography";
-import { Button } from "../ui/button";
 import AddSkills from "./AddSkills";
 import { LoggedInUser } from "@/types/loggedInUser";
+import { getSkills } from "@/lib/data/skills";
 
 interface SkillsCardProps {
   user: LoggedInUser;
 }
 
-export default function SkillsCard({ user }: SkillsCardProps) {
-  const skills = [
-    "JavaScript",
-    "HTML",
-    "CSS",
-    "React.js",
-    "Node.js",
-    "MongoDB",
-    "Tailwid CSS",
-    "Restful APIs",
-    "NoSQL",
-  ];
-
+export default async function SkillsCard({ user }: SkillsCardProps) {
+  const skills = await getSkills(user._id);
   return (
     <section className="w-4/5 border flex justify-between px-12 py-6 rounded-xl shadow">
       <div className="space-y-4">
@@ -38,7 +27,7 @@ export default function SkillsCard({ user }: SkillsCardProps) {
         </TypographyList>
       </div>
 
-      <AddSkills userId={user._id} />
+      <AddSkills userId={user._id} prevSkills={skills} />
     </section>
   );
 }
