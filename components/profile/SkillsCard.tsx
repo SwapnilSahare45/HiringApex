@@ -2,7 +2,7 @@ import { Brain } from "lucide-react";
 import { TypographyH4, TypographyList } from "../ui/typography";
 import AddSkills from "./AddSkills";
 import { LoggedInUser } from "@/types/loggedInUser";
-import { getSkills } from "@/lib/data/skills";
+import { getSkills } from "@/lib/data/userData";
 
 interface SkillsCardProps {
   user: LoggedInUser;

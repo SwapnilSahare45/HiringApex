@@ -3,7 +3,7 @@ import { TypographyH4, TypographyMuted } from "../ui/typography";
 import { Button } from "../ui/button";
 import AddExperience from "./AddExperience";
 import { LoggedInUser } from "@/types/loggedInUser";
-import { getExperience } from "@/lib/data/experience";
+import { getExperience } from "@/lib/data/userData";
 
 interface ExperienceCardProps {
   user: LoggedInUser;

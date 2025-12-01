@@ -3,7 +3,7 @@ import { TypographyH4, TypographyMuted } from "../ui/typography";
 import { Button } from "../ui/button";
 import { LoggedInUser } from "@/types/loggedInUser";
 import AddEducation from "./AddEducation";
-import { getEduction } from "@/lib/data/education";
+import { getEduction } from "@/lib/data/userData";
 
 interface EducationCardProps {
   user: LoggedInUser;
