@@ -95,7 +95,7 @@ export default function AddEducation({ userId }: AddEducationProps) {
           </div>
 
           <div className="space-y-2 pt-2">
-            <Label htmlFor="description">Job Description</Label>
+            <Label htmlFor="grade">Grade</Label>
             <Input id="grade" name="grade" placeholder="e.g., 7.29" />
           </div>
 
