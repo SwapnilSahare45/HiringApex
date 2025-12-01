@@ -1,6 +1,6 @@
 "use server";
 
-import { generateToken, getLoggedInUser } from "@/lib/auth";
+import { generateToken } from "@/lib/auth";
 import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/db";
 import {
@@ -302,7 +302,7 @@ export async function addSkills(
 
     return {
       success: true,
-      message: "Successfully save skills.",
+      message: "Skills save successfully.",
     };
   } catch (error) {
     console.log(error);
@@ -354,6 +354,52 @@ export async function addExperience(
     return {
       success: true,
       message: "Experience added successfully.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: "Something went wrong.",
+    };
+  }
+}
+
+export async function addEducation(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
+  const data = Object.fromEntries(formData);
+  await connectDB();
+
+  const newEducation = {
+    degree: data.degree,
+    institution: data.institution,
+    location: data.location,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    grade: data.grade,
+  };
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      data.userId,
+      { $push: { education: newEducation } },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return {
+        success: false,
+        error: "User not found.",
+      };
+    }
+
+    console.log(updatedUser);
+
+    revalidatePath("/profile");
+
+    return {
+      success: true,
+      message: "Education added successfully.",
     };
   } catch (error) {
     console.log(error);

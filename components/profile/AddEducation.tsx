@@ -1,31 +1,30 @@
 "use client";
 
+import { CalendarDays, CirclePlus, Save } from "lucide-react";
+import { Button } from "../ui/button";
 import {
   Dialog,
-  DialogTitle,
   DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Button } from "../ui/button";
-import { CirclePlus, Save, CalendarDays } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
 import { useActionState, useEffect, useState } from "react";
-import { addExperience } from "@/app/actions/userActions";
+import { addEducation } from "@/app/actions/userActions";
 import { toast } from "sonner";
-interface AddExperienceProps {
+
+interface AddEducationProps {
   userId: string;
 }
 
-export default function AddExperience({ userId }: AddExperienceProps) {
-  const [isCurrent, setIsCurrent] = useState(false);
-  const [open, setOpen] = useState(false);
+export default function AddEducation({ userId }: AddEducationProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const [state, action, isPending] = useActionState(addExperience, {
+  const [state, action, isPending] = useActionState(addEducation, {
     success: false,
     error: "",
   });
@@ -33,46 +32,38 @@ export default function AddExperience({ userId }: AddExperienceProps) {
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
-      setOpen(false);
+      setIsOpen(false);
     } else if (state.error) {
       toast.error(state.error);
     }
   }, [state]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <CirclePlus className="mr-2 h-4 w-4" />
-          Add Experience
+          <CirclePlus />
+          Add Education
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
-            Add Experience
-          </DialogTitle>
+          <DialogTitle className="text-xl font-bold">Add Education</DialogTitle>
         </DialogHeader>
 
         <form action={action} className="grid gap-4 py-4">
           <Input type="hidden" name="userId" value={userId} />
           <div className="space-y-2">
-            <Label htmlFor="title">Job Title</Label>
-            <Input
-              id="title"
-              name="title"
-              placeholder="e.g., Frontend developer"
-              required
-            />
+            <Label htmlFor="degree">Degree</Label>
+            <Input id="degree" name="degree" placeholder="e.g., MCA" />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="company">Company</Label>
+            <Label htmlFor="institution">Institution</Label>
             <Input
-              id="company"
-              name="company"
-              placeholder="e.g., TCS or Freelance"
-              required
+              id="institution"
+              name="institution"
+              placeholder="Enter your college or university"
             />
           </div>
 
@@ -85,30 +76,13 @@ export default function AddExperience({ userId }: AddExperienceProps) {
             />
           </div>
 
-          <div className="flex items-center space-x-2 pt-2">
-            <input
-              type="checkbox"
-              id="isCurrent"
-              name="isCurrent"
-              checked={isCurrent}
-              onChange={() => setIsCurrent(!isCurrent)}
-              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-            />
-            <Label
-              htmlFor="isCurrent"
-              className="flex items-center text-sm font-medium leading-none cursor-pointer"
-            >
-              I currently work here
-            </Label>
-          </div>
-
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate" className="flex items-center">
                 <CalendarDays className="h-4 w-4 mr-1 text-muted-foreground" />{" "}
                 Start Date
               </Label>
-              <Input id="startDate" name="startDate" type="month" required />
+              <Input id="startDate" name="startDate" type="month" />
             </div>
 
             <div className="space-y-2">
@@ -116,23 +90,13 @@ export default function AddExperience({ userId }: AddExperienceProps) {
                 <CalendarDays className="h-4 w-4 mr-1 text-muted-foreground" />{" "}
                 End Date
               </Label>
-              <Input
-                id="endDate"
-                name="endDate"
-                type="month"
-                disabled={isCurrent}
-              />
+              <Input id="endDate" name="endDate" type="month" />
             </div>
           </div>
 
           <div className="space-y-2 pt-2">
             <Label htmlFor="description">Job Description</Label>
-            <Textarea
-              id="description"
-              name="description"
-              placeholder="Summarize your role and key achievements"
-              rows={4}
-            />
+            <Input id="grade" name="grade" placeholder="e.g., 7.29" />
           </div>
 
           <DialogFooter className="mt-5">

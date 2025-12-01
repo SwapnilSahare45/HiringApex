@@ -1,39 +1,71 @@
-import { CirclePlus, GraduationCap, SquarePen } from "lucide-react";
+import { GraduationCap, SquarePen } from "lucide-react";
 import { TypographyH4, TypographyMuted } from "../ui/typography";
 import { Button } from "../ui/button";
+import { LoggedInUser } from "@/types/loggedInUser";
+import AddEducation from "./AddEducation";
+import { getEduction } from "@/lib/data/education";
 
-export default function EducationCard() {
-    return (
-        <section className="w-4/5 border flex justify-between px-12 py-6 rounded-xl shadow">
+interface EducationCardProps {
+  user: LoggedInUser;
+}
 
-            <div className="space-y-4">
-                <TypographyH4 className="flex items-center gap-2">
-                    <GraduationCap />
-                    Education
-                </TypographyH4>
+interface EducationItem {
+  _id: string;
+  degree: string;
+  institution: string;
+  location?: string;
+  startDate: Date | string;
+  endDate: Date | string;
+  grade?: string;
+}
 
-                <div>
-                    <div className="flex items-center mb-1">
-                        <h5 className="font-semibold">MCA</h5>
-                        <Button variant="ghost">
-                            <SquarePen />
-                        </Button>
-                    </div>
+export default async function EducationCard({ user }: EducationCardProps) {
+  const educations = (await getEduction(user._id)) as EducationItem[];
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+  };
+  return (
+    <section className="w-4/5 border flex justify-between px-12 py-6 rounded-xl shadow">
+      <div className="space-y-4">
+        <TypographyH4 className="flex items-center gap-2">
+          <GraduationCap />
+          Education
+        </TypographyH4>
 
-                    <div className="flex items-center gap-2 mb-0.5">
-                        <TypographyMuted>DCPE, HVPM, Amravati</TypographyMuted>
-                        <TypographyMuted>[2023 - 2025]</TypographyMuted>
-                    </div>
-
-                    <TypographyMuted>CGPA - 7.29</TypographyMuted>
-                </div>
+        {educations.map((education) => (
+          <div key={education._id}>
+            <div className="flex items-center">
+              <h5 className="font-semibold">{education.degree}</h5>
+              <Button variant="ghost">
+                <SquarePen />
+              </Button>
             </div>
 
-            <Button variant="outline">
-                <CirclePlus />
-                Add Education
-            </Button>
+            <div className="flex items-center gap-2 mb-0.5">
+              <TypographyMuted className="text-neutral-700 font-semibold">
+                {education.institution}
+              </TypographyMuted>
+              <TypographyMuted>{education.location}</TypographyMuted>
+            </div>
+            <TypographyMuted>
+              {new Date(education.startDate).toLocaleDateString(
+                "en-US",
+                dateOptions
+              )}
+              {" - "}
+              {new Date(education.endDate).toLocaleDateString(
+                "en-US",
+                dateOptions
+              )}
+            </TypographyMuted>
 
-        </section>
-    )
+            <TypographyMuted>{`Grade : ${education.grade}`}</TypographyMuted>
+          </div>
+        ))}
+      </div>
+
+      <AddEducation userId={user._id} />
+    </section>
+  );
 }

@@ -31,6 +31,34 @@ const experienceSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const educationSchema = new mongoose.Schema(
+  {
+    degree: {
+      type: String,
+      required: true,
+    },
+    institution: {
+      type: String,
+      required: true,
+    },
+    location: {
+      type: String,
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    endDate: {
+      type: Date,
+      required: true,
+    },
+    grade: {
+      type: String,
+    },
+  },
+  { _id: true }
+);
+
 const userSchema = new mongoose.Schema({
   role: {
     type: String,
@@ -68,6 +96,10 @@ const userSchema = new mongoose.Schema({
   },
   experience: {
     type: [experienceSchema],
+    default: [],
+  },
+  education: {
+    type: [educationSchema],
     default: [],
   },
   companyName: {

@@ -26,7 +26,7 @@ export default async function ProfilePage() {
 
       <ExperienceCard user={user} />
 
-      <EducationCard />
+      <EducationCard user={user} />
 
       <ProjectCard />
     </main>
