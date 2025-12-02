@@ -1,40 +1,70 @@
-import { Search, Trophy, UserPlus } from "lucide-react";
+import {
+  Search,
+  Trophy,
+  UserPlus,
+  FileText,
+  CheckCircle,
+  Users,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { TypographyH2 } from "../ui/typography";
 
-export default function HowItWorks() {
-  const howItWorks = [
+export default function HowItWorks({ user }: { user: any }) {
+  const seekerSteps = [
     {
       icon: <UserPlus />,
-      title: "Create Your Account",
+      title: "1. Create Profile",
       description:
-        "Start your journey in minutes. Quickly set up your personalized profile. This single step configures your settings for efficient job matching and unlocks One-Click Application submission.",
+        "Set up your professional profile once to unlock One-Click Apply.",
     },
     {
       icon: <Search />,
-      title: "Explore & Discover Jobs",
+      title: "2. Discover Jobs",
       description:
-        "Find the best opportunities for your career. Leverage smart filters and verified listings to explore highly relevant roles, ensuring you only see jobs that match your skills and goals.",
+        "Use smart filters to find verified roles that match your skills.",
     },
     {
       icon: <Trophy />,
-      title: "Apply, Track, & Get Hired",
+      title: "3. Get Hired",
       description:
-        "Track applications and grow faster. Use our One-Click Apply feature and immediately monitor your application status through the dedicated pipeline tracker until you secure your next role.",
-    }
+        "Track your applications from submission to the final offer letter.",
+    },
   ];
+
+  const recruiterSteps = [
+    {
+      icon: <FileText />,
+      title: "1. Post a Job",
+      description: "Fill out the job details, requirements, and salary range.",
+    },
+    {
+      icon: <Users />,
+      title: "2. Review Candidates",
+      description:
+        "See applicants in real-time and view their resumes instantly.",
+    },
+    {
+      icon: <CheckCircle />,
+      title: "3. Hire Talent",
+      description:
+        "Shortlist the best fits and schedule interviews seamlessly.",
+    },
+  ];
+
+  const steps = user?.role === "RECRUITER" ? recruiterSteps : seekerSteps;
+
   return (
-    <section className="w-full pb-8 flex flex-col justify-center items-center gap-4">
+    <section className="w-full pb-8 px-32 flex flex-col justify-center items-center gap-4">
       <TypographyH2>How It Works</TypographyH2>
 
-      <div className="w-3/4 flex gap-4">
-        {howItWorks.map((work, idx) => (
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+        {steps.map((step, idx) => (
           <Card key={idx}>
             <CardHeader>
-              <CardTitle>{work.icon}</CardTitle>
-              <CardTitle>{work.title}</CardTitle>
+              <CardTitle>{step.icon}</CardTitle>
+              <CardTitle>{step.title}</CardTitle>
             </CardHeader>
-            <CardContent>{work.description}</CardContent>
+            <CardContent>{step.description}</CardContent>
           </Card>
         ))}
       </div>

@@ -1,47 +1,90 @@
-import { BadgeCheck, Fingerprint, ListChecks, Shield } from "lucide-react";
+import {
+  BadgeCheck,
+  Fingerprint,
+  ListChecks,
+  Shield,
+  Users,
+  Briefcase,
+  BarChart,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { TypographyH2 } from "../ui/typography";
 
-export default function Features() {
-  const features = [
+export default function Features({ user }: { user: any }) {
+  const guestFeatures = [
     {
       icon: <Fingerprint />,
       title: "One-Click Application",
       description:
-        "Submit your full profile instantly without repetitive forms, dramatically speeding up your job search.",
+        "Submit your full profile instantly without repetitive forms.",
     },
     {
       icon: <ListChecks />,
-      title: "Personalized Pipeline Tracker",
+      title: "Pipeline Tracker",
       description:
-        "Visually manage all your applications—from 'Applied' to 'Interview' to 'Offer'—in one simple dashboard.",
+        "Visually manage all your applications in one simple dashboard.",
     },
     {
       icon: <Shield />,
-      title: "Enterprise-Grade Security",
-      description:
-        "Your profile and application data are protected with modern encryption and secure user authentication.",
+      title: "Secure Platform",
+      description: "Your data is protected with enterprise-grade encryption.",
     },
     {
       icon: <BadgeCheck />,
-      title: "Verified Company Listings",
+      title: "Verified Listings",
       description:
-        "Apply with confidence knowing every job and recruiter profile has been manually reviewed and approved.",
+        "Apply with confidence knowing every job is manually reviewed.",
     },
   ];
 
-  return (
-    <section className="w-full pb-8 flex flex-col justify-center items-center gap-4">
-      <TypographyH2>Features</TypographyH2>
+  const recruiterFeatures = [
+    {
+      icon: <Briefcase />,
+      title: "Smart Job Posting",
+      description:
+        "Create detailed job listings with rich text and custom requirements.",
+    },
+    {
+      icon: <Users />,
+      title: "Applicant Management",
+      description:
+        "View, shortlist, and reject candidates directly from your dashboard.",
+    },
+    {
+      icon: <BadgeCheck />,
+      title: "Company Branding",
+      description:
+        "Showcase your company culture with a verified profile page.",
+    },
+    {
+      icon: <BarChart />,
+      title: "Hiring Analytics",
+      description:
+        "Track views and application rates to optimize your job posts.",
+    },
+  ];
 
-      <div className="w-3/4 flex gap-4">
-        {features.map((feature, idx) => (
-          <Card key={idx}>
+  const featuresToDisplay =
+    user?.role === "RECRUITER" ? recruiterFeatures : guestFeatures;
+
+  return (
+    <section className="w-full pb-8 px-32 flex flex-col justify-center items-center gap-4">
+      <TypographyH2>
+        {user?.role === "RECRUITER"
+          ? "Tools for Hiring"
+          : "Features for Candidates"}
+      </TypographyH2>
+
+      <div className="w-full h-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {featuresToDisplay.map((feature, idx) => (
+          <Card key={idx} className="h-full">
             <CardHeader>
-              <CardTitle>{feature.icon}</CardTitle>
-              <CardTitle>{feature.title}</CardTitle>
+              <CardTitle className="mb-2">{feature.icon}</CardTitle>
+              <CardTitle className="text-lg">{feature.title}</CardTitle>
             </CardHeader>
-            <CardContent>{feature.description}</CardContent>
+            <CardContent className="text-sm text-muted-foreground">
+              {feature.description}
+            </CardContent>
           </Card>
         ))}
       </div>
