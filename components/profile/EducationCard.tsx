@@ -43,9 +43,7 @@ export default async function EducationCard({ user }: EducationCardProps) {
             </div>
 
             <div className="flex items-center gap-2 mb-0.5">
-              <TypographyMuted className="text-neutral-700 font-semibold">
-                {education.institution}
-              </TypographyMuted>
+              <TypographyMuted>{education.institution}</TypographyMuted>
               <TypographyMuted>{education.location}</TypographyMuted>
             </div>
             <TypographyMuted>

@@ -10,11 +10,9 @@ import { LoggedInUser } from "@/types/loggedInUser";
 export default async function Navbar() {
   const userResponse = await getLoggedInUser();
 
-  if (!userResponse.success) {
-    return <p>User profile not load.</p>;
-  }
-
-  const user = JSON.parse(userResponse.data as string) as LoggedInUser;
+  const user =
+    userResponse.success &&
+    (JSON.parse(userResponse.data as string) as LoggedInUser);
 
   return (
     <nav className="w-full border-b p-4 flex items-center justify-evenly">
@@ -28,12 +26,12 @@ export default async function Navbar() {
         </li>
         <li>
           <Button asChild variant="ghost">
-            <Link href="/jobs">Jobs</Link>
+            <Link href="/job_seeker">Jobs</Link>
           </Button>
         </li>
         <li>
           <Button asChild variant="ghost">
-            <Link href="companies">Companies</Link>
+            <Link href="/companies">Companies</Link>
           </Button>
         </li>
       </ul>
@@ -47,7 +45,7 @@ export default async function Navbar() {
       <div className="flex justify-center items-center gap-2">
         {user ? (
           <Button asChild size="icon" variant="outline">
-            <Link href="profile">
+            <Link href="/job_seeker/profile">
               {user.avatar ? (
                 <Image
                   src={user.avatar}

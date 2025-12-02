@@ -393,13 +393,53 @@ export async function addEducation(
       };
     }
 
-    console.log(updatedUser);
-
     revalidatePath("/profile");
 
     return {
       success: true,
       message: "Education added successfully.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: "Something went wrong.",
+    };
+  }
+}
+
+export async function addProject(
+  _: unknown,
+  formData: FormData
+): Promise<AppResponse> {
+  const data = Object.fromEntries(formData);
+  await connectDB();
+
+  const newProject = {
+    title: data.title,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    description: data.description,
+  };
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      data.userId,
+      { $push: { project: newProject } },
+      { new: true }
+    );
+    console.log(updatedUser);
+    if (!updatedUser) {
+      return {
+        success: false,
+        error: "User not found",
+      };
+    }
+
+    revalidatePath("/profile");
+
+    return {
+      success: true,
+      message: "Project added successfully.",
     };
   } catch (error) {
     console.log(error);

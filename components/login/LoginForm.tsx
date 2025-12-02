@@ -28,7 +28,7 @@ export default function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginUser, {
     success: false,
     error: "",
-    errors: {}
+    errors: {},
   });
 
   const form = useForm<loginSchemaType>({
@@ -40,16 +40,15 @@ export default function LoginForm() {
   });
 
   useEffect(() => {
-
     if (!state.success && state.errors) {
       Object.entries(state.errors).forEach(([field, messages]) => {
         if (messages && messages.length > 0) {
           form.setError(field as keyof loginSchemaType, {
-            type: 'server',
-            message: messages[0]
-          })
+            type: "server",
+            message: messages[0],
+          });
         }
-      })
+      });
     }
 
     if (!state.success && state.error) {
@@ -62,7 +61,6 @@ export default function LoginForm() {
       }
       router.push("/");
     }
-
   }, [state]);
 
   const togglePassword = () => {
@@ -80,7 +78,6 @@ export default function LoginForm() {
     startTransition(() => {
       formAction(formData);
     });
-
   };
 
   return (

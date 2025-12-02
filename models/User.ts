@@ -59,6 +59,27 @@ const educationSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const projectSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    startDate: {
+      type: Date,
+      required: true,
+    },
+    endDate: {
+      type: Date,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+  },
+  { _id: true }
+);
+
 const userSchema = new mongoose.Schema({
   role: {
     type: String,
@@ -100,6 +121,10 @@ const userSchema = new mongoose.Schema({
   },
   education: {
     type: [educationSchema],
+    default: [],
+  },
+  project: {
+    type: [projectSchema],
     default: [],
   },
   companyName: {

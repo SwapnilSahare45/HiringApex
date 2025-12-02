@@ -18,9 +18,10 @@ import { toast } from "sonner";
 
 interface ResumeCardProps {
   user: LoggedInUser;
+  resume: string;
 }
 
-export default function ResumeCard({ user }: ResumeCardProps) {
+export default function ResumeCard({ user, resume }: ResumeCardProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -59,7 +60,16 @@ export default function ResumeCard({ user }: ResumeCardProps) {
           <FileText />
         </EmptyMedia>
         <EmptyTitle>Resume</EmptyTitle>
-        {/* <EmptyDescription>Resume not uploaded yet.</EmptyDescription> */}
+
+        <EmptyDescription>
+          {resume ? (
+            <a href={resume} target="_blank" rel="noopener noreferrer">
+              View Resume
+            </a>
+          ) : (
+            "Resume not uploaded yet."
+          )}
+        </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <form action={action} ref={formRef}>

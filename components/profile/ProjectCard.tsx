@@ -1,34 +1,62 @@
-import { CirclePlus, FolderCode, SquarePen } from "lucide-react";
+import { FolderCode, SquarePen } from "lucide-react";
 import { TypographyH4, TypographyMuted } from "../ui/typography";
 import { Button } from "../ui/button";
+import AddProject from "./AddProject";
+import { LoggedInUser } from "@/types/loggedInUser";
+import { getProject } from "@/lib/data/userData";
 
-export default function ProjectCard() {
-    return (
-        <section className="w-4/5 border flex justify-between px-12 py-6 rounded-xl shadow">
+interface ProjectCardProps {
+  user: LoggedInUser;
+}
 
-            <div className="space-y-4">
-                <TypographyH4 className="flex items-center gap-2">
-                    <FolderCode />
-                    Project
-                </TypographyH4>
+interface ProjectItem {
+  _id: string;
+  title: string;
+  startDate: Date | string;
+  endDate: Date | string;
+  description: string;
+}
 
-                <div className="w-4/5">
-                    <div className="flex items-center mb-1">
-                        <h5 className="font-semibold">ARTORA, Art Auction Platform</h5>
-                        <Button variant="ghost">
-                            <SquarePen />
-                        </Button>
-                    </div>
-                    <TypographyMuted className="mb-0.5">Mar 2025 to Aug 2025</TypographyMuted>
-                    <TypographyMuted>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi sint, natus, similique doloribus, modi ea perspiciatis reprehenderit accusamus illo dicta nesciunt et sit libero debitis. Consequatur ratione esse quidem itaque.</TypographyMuted>
-                </div>
+export default async function ProjectCard({ user }: ProjectCardProps) {
+  const projects = (await getProject(user._id)) as ProjectItem[];
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+  };
+  return (
+    <section className="w-4/5 border flex justify-between px-12 py-6 rounded-xl shadow">
+      <div className="space-y-4">
+        <TypographyH4 className="flex items-center gap-2">
+          <FolderCode />
+          Project
+        </TypographyH4>
+
+        {projects.map((project) => (
+          <div key={project._id}>
+            <div className="flex items-center mb-1">
+              <h5 className="font-semibold">{project.title}</h5>
+              <Button variant="ghost">
+                <SquarePen />
+              </Button>
             </div>
+            <TypographyMuted className="mb-0.5">
+              {new Date(project.startDate).toLocaleDateString(
+                "en-US",
+                dateOptions
+              )}
+              {" to "}
+              {new Date(project.endDate).toLocaleDateString(
+                "en-US",
+                dateOptions
+              )}
+            </TypographyMuted>
+            <TypographyMuted>{project.description}</TypographyMuted>
+          </div>
+        ))}
+      </div>
 
-            <Button variant="outline">
-                <CirclePlus/>
-                Add Project
-            </Button>
-
-        </section>
-    )
+      <AddProject userId={user._id} />
+    </section>
+  );
 }
