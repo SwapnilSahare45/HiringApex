@@ -1,12 +1,6 @@
 import {
-  Rocket,
-  Target,
   GlobeLock,
   ShieldCheck,
-  FileSearch,
-  LineChart,
-  Star,
-  Briefcase,
   Users,
   Search,
   FileText,
