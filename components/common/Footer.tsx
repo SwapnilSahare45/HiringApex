@@ -15,7 +15,7 @@ export default function Footer() {
           </ul>
 
           <ul>
-            <li>One</li>
+            <li>Join us and start your journey today.</li>
             <li>Two</li>
             <li>Three</li>
             <li>Four</li>

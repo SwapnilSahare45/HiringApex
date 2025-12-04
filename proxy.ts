@@ -1,38 +1,62 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getLoggedInUser } from "./lib/auth";
+import { jwtVerify } from "jose";
 
+const authRoutes = ["/login", "/register"];
+const publicRoutes = ["/", "/jobs"];
 export async function proxy(req: NextRequest) {
-  const userResponse = await getLoggedInUser();
-  const isAuthenticated = userResponse.success;
+  const { pathname } = req.nextUrl;
+  const token = req.cookies.get("session_id")?.value;
 
-  const publicPages = ["/", "/login", "/register"];
+  let user = null;
 
-  // If logged-in user try to go "/login" or "/register" then redirect to "/jobs"
-  if (
-    isAuthenticated &&
-    (req.nextUrl.pathname === "/login" || req.nextUrl.pathname === "/register")
-  ) {
-    return NextResponse.redirect(new URL("/jobs", req.url));
+  if (token) {
+    try {
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      const { payload } = await jwtVerify(token, secret);
+
+      user = payload as { role: string; email: string };
+    } catch (error) {
+      console.log("Middleware: Invalid Token", error);
+    }
   }
 
-  // If not logged-in and try to visit protected pages then redirect to "/login"
-  if (!isAuthenticated && !publicPages.includes(req.nextUrl.pathname)) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  const isAuthRoute = authRoutes.includes(pathname);
+  const isPublicRoute = publicRoutes.some(
+    (route) => pathname === route || pathname.startsWith("/jobs/")
+  );
+
+  if (user) {
+    const role = user.role.toUpperCase();
+    if (isAuthRoute) {
+      if (role === "RECRUITER") {
+        return NextResponse.redirect(new URL("/recruiter/profile", req.url));
+      } else {
+        return NextResponse.redirect(new URL("/seeker/profile", req.url));
+      }
+    }
+
+    if (pathname.startsWith("/seeker") && user.role !== "SEEKER") {
+      return NextResponse.redirect(new URL("/recruiter/profile", req.url));
+    }
+
+    if (pathname.startsWith("/recruiter") && user.role !== "RECRUITER") {
+      return NextResponse.redirect(new URL("/seeker/profile", req.url));
+    }
+
+    return NextResponse.next();
   }
 
-  // Allow the request to continue normally for valid routes
-  return NextResponse.next();
+  if (!user) {
+    if (!isPublicRoute && !isAuthRoute) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    return NextResponse.next();
+  }
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.svg).*)",
   ],
 };

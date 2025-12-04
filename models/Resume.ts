@@ -5,6 +5,8 @@ const resumeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
+    index: true,
+    unique: true,
   },
   resumeFile: {
     type: String,

@@ -68,9 +68,7 @@ export function TypographyP({
   children,
   className,
 }: React.PropsWithChildren<{ className?: string }>) {
-  return (
-    <p className={cn("leading-7 not-first:mt-6", className)}>{children}</p>
-  );
+  return <p className={cn("leading-7", className)}>{children}</p>;
 }
 
 export function TypographyBlockquote({
@@ -88,11 +86,7 @@ export function TypographyList({
   children,
   className,
 }: React.PropsWithChildren<{ className?: string }>) {
-  return (
-    <ul className={cn("my-6 ml-6 list-disc", className)}>
-      {children}
-    </ul>
-  );
+  return <ul className={cn("my-6 list-disc", className)}>{children}</ul>;
 }
 
 export function TypographyMuted({

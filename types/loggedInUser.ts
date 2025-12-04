@@ -1,7 +1,7 @@
 export type LoggedInUser = {
   _id: string;
   role: string;
-  username: string;
+  name: string;
   email: string;
   headline?: string;
   mobileNo?: string;

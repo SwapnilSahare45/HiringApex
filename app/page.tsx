@@ -1,24 +1,28 @@
-import CTA from "@/components/home/CTA";
-import Features from "@/components/home/Features";
-import Hero from "@/components/home/Hero";
-import HowItWorks from "@/components/home/HowItWorks";
-import Services from "@/components/home/Services";
-import WhyChooseUS from "@/components/home/WhyChooseUS";
+import CTA from "@/components/common/home/CTA";
+import Features from "@/components/common/home/Features";
+import Hero from "@/components/common/home/Hero";
+import HowItWorks from "@/components/common/home/HowItWorks";
+import Services from "@/components/common/home/Services";
+import WhyChooseUS from "@/components/common/home/WhyChooseUS";
+import { getLoggedInUser } from "./actions/auth.actions";
+import { LoggedInUser } from "@/types/loggedInUser";
 
-export default function Home() {
+export default async function Home() {
+  const userResponse = await getLoggedInUser();
+  const user = userResponse.data as LoggedInUser;
   return (
     <>
-      <Hero />
+      <Hero user={user} />
 
-      <Features />
+      <Features user={user} />
 
-      <Services />
+      <Services user={user} />
 
-      <HowItWorks />
+      <HowItWorks user={user} />
 
-      <WhyChooseUS />
+      <WhyChooseUS user={user} />
 
-      <CTA />
+      <CTA user={user} />
     </>
   );
 }
