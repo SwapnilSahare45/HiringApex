@@ -45,7 +45,7 @@ export default async function ProjectCard({ user }: ProjectCardProps) {
       <CardContent>
         {hasProject ? (
           <div>
-            {projects.map((project, idx) => {
+            {projects.map((project) => {
               const startDate = new Date(project.startDate).toLocaleDateString(
                 "en-US",
                 dateOptions
@@ -56,7 +56,7 @@ export default async function ProjectCard({ user }: ProjectCardProps) {
               );
               return (
                 <div
-                  key={idx}
+                  key={project._id}
                   className="mb-2 flex flex-col px-12 py-4 border rounded-2xl"
                 >
                   <div className="flex items-center gap-2">

@@ -22,7 +22,7 @@ export default function Hero({ user }: HeroProps) {
       title: `Welcome back, ${user.name.split(" ")[0]}`,
       subtext:
         "Track your applications, update your profile, and land your dream job today.",
-      primaryBtn: { text: "My Dashboard", href: "/seeker/dashboard" },
+      primaryBtn: { text: "My profile", href: "/seeker/profile" },
       secondaryBtn: { text: "Search Jobs", href: "/jobs" },
     };
   } else if (user?.role === "RECRUITER") {
@@ -31,7 +31,7 @@ export default function Hero({ user }: HeroProps) {
       subtext:
         "Post jobs, manage applicants, and hire the best talent efficiently.",
       primaryBtn: { text: "Post a Job", href: "/recruiter/create-job" },
-      secondaryBtn: { text: "Go to Dashboard", href: "/recruiter/dashboard" },
+      secondaryBtn: { text: "Go to profile", href: "/recruiter/profile" },
     };
   }
 

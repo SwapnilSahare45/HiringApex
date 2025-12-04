@@ -61,7 +61,7 @@ export default async function ExperienceCard({ user }: ExperienceCardProps) {
 
               return (
                 <div
-                  key={exp.id}
+                  key={exp._id}
                   className="mb-2 flex items-center gap-12 px-12 py-4 border rounded-2xl"
                 >
                   <div>

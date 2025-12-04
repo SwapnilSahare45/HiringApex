@@ -8,6 +8,15 @@ import {
   Star,
   Briefcase,
   Users,
+  Search,
+  FileText,
+  ListChecks,
+  Bookmark,
+  Settings,
+  Send,
+  UserCheck,
+  Building2,
+  Activity,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { TypographyH2 } from "../../ui/typography";
@@ -20,81 +29,81 @@ interface ServicesProps {
 export default function Services({ user }: ServicesProps) {
   const guestServices = [
     {
-      icon: <Rocket />,
-      title: "Accelerated Application",
-      description: "Submit profiles to multiple roles in minutes, not hours.",
-    },
-    {
-      icon: <Target />,
-      title: "Career Management",
-      description:
-        "A dedicated dashboard for logging and tracking every application.",
-    },
-    {
       icon: <GlobeLock />,
-      title: "Data Integrity",
+      title: "Vetted Ecosystem",
       description:
-        "Commitment to protecting personal data through secure protocols.",
+        "We manually review companies and jobs for authenticity before posting.",
+    },
+    {
+      icon: <Search />,
+      title: "Advanced Filtering",
+      description:
+        "Search jobs by salary, type (Remote/On-site), and required skills efficiently.",
+    },
+    {
+      icon: <Users />,
+      title: "Direct Recruiter Contact",
+      description:
+        "Profiles are sent directly to hiring managers without complex intermediate steps.",
     },
     {
       icon: <ShieldCheck />,
-      title: "Vetted Ecosystem",
+      title: "Secure Profile Data",
       description:
-        "We manually verify every company and job posting before it goes live.",
+        "User profiles are protected with standard encryption and secure sessions.",
     },
   ];
 
   const seekerServices = [
     {
-      icon: <FileSearch />,
-      title: "AI Resume Review",
+      icon: <FileText />,
+      title: "Comprehensive Profile Builder",
       description:
-        "Get instant feedback on your resume to increase your chances of being shortlisted.",
+        "Easily input and manage your experience, education, and projects in one place.",
     },
     {
-      icon: <LineChart />,
-      title: "Salary Insights",
+      icon: <ListChecks />,
+      title: "Application Pipeline Tracker",
       description:
-        "View detailed salary ranges for every role to ensure you are paid what you're worth.",
+        "Visually monitor the status (Applied, Interviewing, Rejected) of every job application.",
     },
     {
-      icon: <Star />,
-      title: "Priority Application",
+      icon: <Bookmark />,
+      title: "Job Saving & Alerts",
       description:
-        "Your application gets highlighted to recruiters, ensuring you don't get lost in the pile.",
+        "Save job listings for later and receive email alerts for new matching positions.",
     },
     {
-      icon: <Briefcase />,
-      title: "Job Alerts",
-      description:
-        "Get notified instantly when a job matching your exact skills is posted.",
+      icon: <Settings />,
+      title: "Personalized Settings",
+      description: "Customize your dashboard and notification preferences.",
     },
   ];
 
   const recruiterServices = [
     {
-      icon: <Rocket />,
-      title: "Promoted Listings",
+      icon: <Send />,
+      title: "Intuitive Job Posting",
       description:
-        "Boost your job posts to the top of search results to get 3x more applicants.",
+        "Create and publish detailed job listings in minutes using a simple form interface.",
     },
     {
-      icon: <Users />,
-      title: "Candidate Database",
+      icon: <UserCheck />,
+      title: "Applicant Review Dashboard",
       description:
-        "Search our entire database of active job seekers to find hidden talent.",
+        "Filter and manage candidates, changing application statuses (Shortlist, Interview) easily.",
     },
     {
-      icon: <ShieldCheck />,
-      title: "Background Checks",
+      icon: <Building2 />,
+      title: "Company Profile Management",
       description:
-        "One-click integration to verify the work history and identity of applicants.",
+        "Maintain your company brand and information with a dedicated profile editor.",
     },
     {
-      icon: <Target />,
-      title: "Headhunting Mode",
+      icon: <Activity />,
+      title: "Job Activity Monitoring",
       description:
-        "Let our system auto-match the top 1% of candidates to your job requirements.",
+        "View basic analytics on job views and application volume for your posts.",
     },
   ];
 

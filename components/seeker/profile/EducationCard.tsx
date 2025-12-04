@@ -50,7 +50,7 @@ export default async function EducationCard({ user }: EducationCardProps) {
                     );
               return (
                 <div
-                  key={education.id}
+                  key={education._id}
                   className="mb-2 flex flex-col px-12 py-4 border rounded-2xl"
                 >
                   <div className="flex items-center gap-2">
