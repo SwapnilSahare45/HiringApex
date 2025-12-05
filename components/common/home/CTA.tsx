@@ -23,11 +23,23 @@ export default function CTA({ user }: CTAProps) {
       btnLink: "/jobs",
     };
   } else if (user?.role === "RECRUITER") {
-    content = {
+    const recruiterContent = {
       title: "Ready to grow your team?",
       quote: "Find the perfect candidate today.",
-      btnText: "Post a Job Now",
-      btnLink: "/recruiter/create-job",
+    };
+
+    let btnText = "Post a Job Now";
+    let btnLink = "/recruiter/jobs/new";
+
+    if (!user?.companyId) {
+      btnText = "Setup Company";
+      btnLink = "/recruiter/company/setup";
+    }
+
+    content = {
+      ...recruiterContent,
+      btnText,
+      btnLink,
     };
   }
 

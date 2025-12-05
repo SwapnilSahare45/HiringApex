@@ -60,15 +60,22 @@ export async function registerUser(
   }
 }
 
+type LoginSuccessWithRedirect = {
+  success: true;
+  message: string;
+  redirectTo: string;
+};
 export async function userLogin(
   _: AppResponse,
   data: loginSchemaType
-): Promise<AppResponse> {
+): Promise<AppResponse | LoginSuccessWithRedirect> {
   try {
     await connectDB();
     const cookieStore = await cookies();
 
-    const user = await User.findOne({ email: data.email });
+    const user = await User.findOne({ email: data.email }).select(
+      "password role companyId"
+    );
 
     if (!user) {
       return {
@@ -97,9 +104,19 @@ export async function userLogin(
       }
     );
 
+    let redirectTo = "/";
+
+    if (user.role === "RECRUITER") {
+      if (!user.companyId) {
+        redirectTo = "/recruiter/company/setup";
+      } else {
+        redirectTo = "/recruiter";
+      }
+    }
     return {
       success: true,
       message: "Login successfully.",
+      redirectTo: redirectTo,
     };
   } catch (error) {
     console.log("Error occur during user login: ", error);

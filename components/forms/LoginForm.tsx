@@ -48,7 +48,11 @@ export default function LoginForm() {
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
-      router.push("/");
+      if ("redirectTo" in state && state.redirectTo) {
+        router.push(state.redirectTo);
+      } else {
+        router.push("/");
+      }
     } else if (state.error) {
       toast.error(state.error);
     }

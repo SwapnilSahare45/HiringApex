@@ -31,7 +31,7 @@ const companySchema = new mongoose.Schema(
     linkedinUrl: {
       type: String,
     },
-    logoUrl: {
+    companyLogo: {
       type: String,
     },
     description: {

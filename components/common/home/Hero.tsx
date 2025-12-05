@@ -26,12 +26,25 @@ export default function Hero({ user }: HeroProps) {
       secondaryBtn: { text: "Search Jobs", href: "/jobs" },
     };
   } else if (user?.role === "RECRUITER") {
-    content = {
+    const recruiterContent = {
       title: "Build Your Dream Team",
       subtext:
         "Post jobs, manage applicants, and hire the best talent efficiently.",
-      primaryBtn: { text: "Post a Job", href: "/recruiter/create-job" },
-      secondaryBtn: { text: "Go to profile", href: "/recruiter/profile" },
+    };
+
+    let primaryBtn, secondaryBtn;
+
+    if (user?.companyId) {
+      primaryBtn = { text: "Post a Job", href: "/recruiter/jobs/new" };
+      secondaryBtn = { text: "Go to Dashboard", href: "/recruiter" };
+    } else {
+      primaryBtn = { text: "Setup Company", href: "/recruiter/company/setup" };
+      secondaryBtn = { text: "Go to Profile", href: "/recruiter/profile" };
+    }
+    content = {
+      ...recruiterContent,
+      primaryBtn,
+      secondaryBtn,
     };
   }
 

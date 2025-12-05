@@ -49,7 +49,6 @@ export async function editSeekerProfile(
         overwrite: true,
         format: "webp",
       });
-      console.log(uploadResponse);
       avatarUrl = uploadResponse.secure_url;
     }
 

@@ -7,4 +7,5 @@ export type LoggedInUser = {
   mobileNo?: string;
   city?: string;
   avatar?: string;
+  companyId: string;
 };
