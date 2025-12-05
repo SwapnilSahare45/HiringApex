@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
   headline: {
     type: String,
   },
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Company",
+  },
 });
 
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
