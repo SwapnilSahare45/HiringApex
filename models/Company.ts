@@ -8,6 +8,11 @@ const companySchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
+    slug: {
+      type: String,
+      lowercase: true,
+      unique: true,
+    },
     adminRecruiterId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -21,7 +26,7 @@ const companySchema = new mongoose.Schema(
     ],
     websiteUrl: {
       type: String,
-      requried: true,
+      required: true,
     },
     linkedinUrl: {
       type: String,
