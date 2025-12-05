@@ -14,7 +14,7 @@ export default async function SkillsCard({ user }: SkillsCardProps) {
   const skills = await getSkills(user._id);
   const hasSkills = skills && skills.length > 0;
   return (
-    <Card className="w-4/5">
+    <Card className="w-full lg:w-4/5">
       <CardHeader className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Brain className="w-6 h-6" />
@@ -25,7 +25,7 @@ export default async function SkillsCard({ user }: SkillsCardProps) {
       <Separator />
       <CardContent>
         {hasSkills ? (
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-2 md:gap-4">
             {skills.map((skill, idx) => (
               <div key={idx} className="px-6 py-2 border">
                 <span className="text-sm">{skill}</span>

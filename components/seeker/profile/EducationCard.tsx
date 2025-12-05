@@ -24,9 +24,9 @@ export default async function EducationCard({ user }: EducationCardProps) {
     month: "short",
   };
   return (
-    <Card className="w-4/5">
-      <CardHeader className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <Card className="w-full lg:w-4/5">
+      <CardHeader className="flex flex-col md:flex-row md:items-center justify-between">
+        <div className="flex items-center gap-1 md:gap-3">
           <GraduationCap className="w-6 h-6" />
           <CardTitle className="text-xl font-bold">Education</CardTitle>
         </div>
@@ -51,16 +51,16 @@ export default async function EducationCard({ user }: EducationCardProps) {
               return (
                 <div
                   key={education._id}
-                  className="mb-2 flex flex-col px-12 py-4 border rounded-2xl"
+                  className="mb-2 flex flex-col px-4 md:px-12 py-4 border rounded-2xl"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex md:items-center md:gap-2">
                     <TypographyH4>{education.degree}</TypographyH4>
                     <Button variant="ghost">
                       <Pencil />
                     </Button>
                   </div>
 
-                  <TypographyP className="-mt-2 mb-2">
+                  <TypographyP className="-mt-2 leading-6 mb-2">
                     {education.institution}
                   </TypographyP>
 

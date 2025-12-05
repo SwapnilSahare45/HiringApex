@@ -64,7 +64,7 @@ export default function LoginForm() {
     });
   }
   return (
-    <Card className="w-full flex shadow md:w-1/2 lg:w-1/3">
+    <Card className="w-full flex shadow md:w-3/5 lg:w-1/3">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center mb-0">
           Welcome Back

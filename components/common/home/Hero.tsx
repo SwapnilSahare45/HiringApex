@@ -49,7 +49,7 @@ export default function Hero({ user }: HeroProps) {
   }
 
   return (
-    <section className="w-full flex flex-col-reverse md:flex-row justify-around items-center py-12 gap-8 md:gap-0">
+    <section className="w-full flex flex-col-reverse justify-around items-center mb-16 md:mb-0 md:py-8 lg:py-12 md:flex-row md:gap-0">
       <div className="text-center md:text-left space-y-4 max-w-xl">
         <TypographyH1>{content.title}</TypographyH1>
 

@@ -106,15 +106,17 @@ export default function Services({ user }: ServicesProps) {
   if (user?.role === "RECRUITER") services = recruiterServices;
 
   return (
-    <section className="w-full pb-8 px-32 flex flex-col justify-center items-center gap-4">
+    <section className="w-full px-4 pb-8 flex flex-col justify-center items-center gap-4 md:px-12 lg:px-32">
       <TypographyH2>Our Services</TypographyH2>
 
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {services.map((service, idx) => (
           <Card key={idx} className="h-full">
             <CardHeader>
-              <CardTitle className="mb-2">{service.icon}</CardTitle>
-              <CardTitle className="text-lg">{service.title}</CardTitle>
+              <CardTitle className="md:mb-2">{service.icon}</CardTitle>
+              <CardTitle className="text-lg -mb-2 lg:mb-0">
+                {service.title}
+              </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
               {service.description}

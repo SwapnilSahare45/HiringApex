@@ -2,11 +2,11 @@ import Image from "next/image";
 import { TypographyMuted } from "../ui/typography";
 export default function Footer() {
   return (
-    <footer className="w-full border-t py-4">
-      <div className="flex justify-around border-b py-4">
-        <Image src="/logo7.png" alt="HiringApex" width={200} height={100} />
+    <footer className="w-full border-t py-4 px-6 md:px-0">
+      <div className="flex flex-col border-b gap-4 md:gap-0 py-4 md:flex-row md:justify-around">
+        <Image src="/logo7.png" alt="HiringApex" width={150} height={100} />
 
-        <div className="flex gap-20">
+        <div className="flex gap-8 md:gap-20">
           <ul>
             <li>Home</li>
             <li>Jobs</li>
@@ -15,7 +15,7 @@ export default function Footer() {
           </ul>
 
           <ul>
-            <li>Join us and start your journey today.</li>
+            <li>One</li>
             <li>Two</li>
             <li>Three</li>
             <li>Four</li>

@@ -44,7 +44,7 @@ export default function CTA({ user }: CTAProps) {
   }
 
   return (
-    <section className="w-full py-12 bg-gray-100 dark:bg-neutral-900 flex flex-col justify-center items-center text-center">
+    <section className="w-full py-8 bg-gray-100 dark:bg-neutral-900 flex flex-col justify-center items-center text-center md:py-12">
       <TypographyH2>{content.title}</TypographyH2>
       <TypographyBlockquote className="not-first:mt-0 mb-4 max-w-2xl">
         {content.quote}

@@ -16,9 +16,9 @@ interface ProfileCardProps {
 
 export default async function ProfileCard({ user }: ProfileCardProps) {
   return (
-    <Card className="w-4/5">
-      <CardContent className="flex items-center justify-between">
-        <div className="flex items-center gap-8">
+    <Card className="w-full lg:w-4/5">
+      <CardContent className="flex flex-col md:flex-row md:items-center justify-between">
+        <div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0 md:gap-8">
           <p className="w-32 h-32 border rounded-full">
             {user.avatar ? (
               <Image
@@ -40,26 +40,26 @@ export default async function ProfileCard({ user }: ProfileCardProps) {
               </TypographyH2>
             )}
             {user.headline && (
-              <TypographyP className="not-first:mt-0 mb-3">
+              <TypographyP className="not-first:mt-0 leading-6 mb-3">
                 {user.headline}
               </TypographyP>
             )}
 
-            <TypographyList className="list-none my-0 ml-0 flex gap-8">
+            <TypographyList className="list-none my-0 ml-0 flex flex-col md:flex-row flex-wrap gap-2 lg:gap-7">
               {user.email && (
-                <li className="flex items-center justify-center gap-1">
+                <li className="flex items-center md:justify-center gap-1">
                   <Mail className="w-4 h-4" />
                   <TypographyMuted>{user.email}</TypographyMuted>
                 </li>
               )}
               {user.mobileNo && (
-                <li className="flex items-center justify-center gap-1">
+                <li className="flex items-center md:justify-center gap-1">
                   <Phone className="w-4 h-4" />
                   <TypographyMuted>{user.mobileNo}</TypographyMuted>
                 </li>
               )}
               {user.city && (
-                <li className="flex items-center justify-center gap-1">
+                <li className="flex items-center md:justify-center gap-1">
                   <MapPin className="w-4 h-4" />
                   <TypographyMuted>{user.city}</TypographyMuted>
                 </li>

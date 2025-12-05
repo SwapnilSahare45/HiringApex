@@ -54,7 +54,7 @@ export default function ResumeCard({ user, resume }: ResumeCardProps) {
   }, [state]);
 
   return (
-    <Empty className="w-4/5 border border-dashed shadow">
+    <Empty className="w-full lg:w-4/5 border border-dashed shadow">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <FileText />

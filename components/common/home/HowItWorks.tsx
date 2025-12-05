@@ -59,15 +59,15 @@ export default function HowItWorks({ user }: HowItWorksProps) {
   const steps = user?.role === "RECRUITER" ? recruiterSteps : seekerSteps;
 
   return (
-    <section className="w-full pb-8 px-32 flex flex-col justify-center items-center gap-4">
+    <section className="w-full px-4 pb-8 flex flex-col justify-center items-center gap-4 md:px-12 lg:px-32">
       <TypographyH2>How It Works</TypographyH2>
 
-      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {steps.map((step, idx) => (
           <Card key={idx}>
             <CardHeader>
               <CardTitle>{step.icon}</CardTitle>
-              <CardTitle>{step.title}</CardTitle>
+              <CardTitle className="-mb-2 lg:mb-0">{step.title}</CardTitle>
             </CardHeader>
             <CardContent>{step.description}</CardContent>
           </Card>

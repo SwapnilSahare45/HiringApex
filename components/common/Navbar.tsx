@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Bell, User } from "lucide-react";
+import { Bell, Menu, User } from "lucide-react";
 import { LoggedInUser } from "@/types/loggedInUser";
 import { getLoggedInUser } from "@/app/actions/auth.actions";
 
@@ -17,10 +17,10 @@ export default async function Navbar() {
   const profilePath =
     user?.role === "RECRUITER" ? "/recruiter/profile" : "/seeker/profile";
   return (
-    <nav className="w-full border-b p-4 flex items-center justify-evenly">
+    <nav className="w-full border-b py-3 px-4 flex items-center justify-between md:justify-evenly md:p-4">
       <Image src="/logo7.png" alt="HiringApex" width={60} height={30} />
 
-      <ul className="flex gap-4">
+      <ul className="hidden gap-4 md:flex">
         <li>
           <Button asChild variant="ghost">
             <Link href="/">Home</Link>
@@ -28,7 +28,7 @@ export default async function Navbar() {
         </li>
         <li>
           <Button asChild variant="ghost">
-            <Link href="/job_seeker">Jobs</Link>
+            <Link href="/jobs">Jobs</Link>
           </Button>
         </li>
         <li>
@@ -38,13 +38,13 @@ export default async function Navbar() {
         </li>
       </ul>
 
-      <div className="w-1/4">
+      <div className="hidden w-1/4 md:block">
         <Input type="text" placeholder="Search jobs..." />
       </div>
 
-      {user && <Bell />}
+      {user && <Bell className="hidden md:flex" />}
 
-      <div className="flex justify-center items-center gap-2">
+      <div className="hidden justify-center items-center gap-2 md:flex">
         {user ? (
           <Button asChild size="icon" variant="outline">
             <Link href={profilePath}>
@@ -74,6 +74,10 @@ export default async function Navbar() {
 
         <ModeToggle />
       </div>
+
+      <Button variant="ghost" size="icon" className="md:hidden">
+        <Menu className="min-w-6 min-h-6" />
+      </Button>
     </nav>
   );
 }

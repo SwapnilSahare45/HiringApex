@@ -34,9 +34,9 @@ export default async function ExperienceCard({ user }: ExperienceCardProps) {
   const hasExperience = experiences && experiences.length > 0;
 
   return (
-    <Card className="w-4/5">
-      <CardHeader className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+    <Card className="w-full lg:w-4/5">
+      <CardHeader className="flex flex-col md:flex-row md:items-center justify-between">
+        <div className="flex items-center gap-1 md:gap-3">
           <BriefcaseBusiness className="w-6 h-6" />
           <CardTitle className="text-xl font-bold">Experience</CardTitle>
         </div>
@@ -62,21 +62,23 @@ export default async function ExperienceCard({ user }: ExperienceCardProps) {
               return (
                 <div
                   key={exp._id}
-                  className="mb-2 flex items-center gap-12 px-12 py-4 border rounded-2xl"
+                  className="mb-2 flex flex-col md:flex-row items-center md:gap-12 px-4 md:px-12 py-4 border rounded-2xl"
                 >
                   <div>
                     <Building2 className="w-12 h-12" />
                   </div>
 
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex md:items-center md:gap-2">
                       <TypographyH4>{exp.title}</TypographyH4>
                       <Button variant="ghost">
                         <Pencil />
                       </Button>
                     </div>
 
-                    <TypographyP className="-mt-2">{exp.company}</TypographyP>
+                    <TypographyP className="md:-mt-2">
+                      {exp.company}
+                    </TypographyP>
 
                     <TypographyList className="list-none flex gap-4 my-2">
                       <li className="flex items-center gap-1">

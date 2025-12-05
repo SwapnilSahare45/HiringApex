@@ -138,7 +138,7 @@ export default function CreateCompanyForm() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="w-full">
+      <DialogTrigger asChild className="w-full">
         <Button className="w-full">Start New Company Setup</Button>
       </DialogTrigger>
       <DialogContent>

@@ -14,7 +14,7 @@ export default async function Profile() {
 
   const resume = await getResume(user._id);
   return (
-    <main className="w-full flex flex-col items-center gap-6 py-8">
+    <main className="w-full flex flex-col items-center gap-2 md:gap-6 lg:gap-8 px-2 md:px-6 lg:px-0 py-2 md:py-6 lg:py-8">
       <ProfileCard user={user} />
       <SkillsCard user={user} />
       <ExperienceCard user={user} />

@@ -32,9 +32,9 @@ export default async function ProjectCard({ user }: ProjectCardProps) {
     month: "short",
   };
   return (
-    <Card className="w-4/5">
+    <Card className="w-full lg:w-4/5">
       <CardHeader className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 md:gap-3">
           <Code2 className="w-6 h-6" />
           <CardTitle className="text-xl font-bold">Project</CardTitle>
         </div>
@@ -57,9 +57,9 @@ export default async function ProjectCard({ user }: ProjectCardProps) {
               return (
                 <div
                   key={project._id}
-                  className="mb-2 flex flex-col px-12 py-4 border rounded-2xl"
+                  className="mb-2 flex flex-col px-4 md:px-12 py-4 border rounded-2xl"
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex md:items-center mb-1 md:mb-0 md:gap-2">
                     <TypographyH4>{project.title}</TypographyH4>
                     <Button variant="ghost">
                       <Pencil />

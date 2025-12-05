@@ -73,7 +73,7 @@ export default function Features({ user }: FeaturesProps) {
     user?.role === "RECRUITER" ? recruiterFeatures : guestFeatures;
 
   return (
-    <section className="w-full pb-8 px-32 flex flex-col justify-center items-center gap-4">
+    <section className="w-full px-4 pb-8 flex flex-col justify-center items-center gap-4 md:px-12 lg:px-32">
       <TypographyH2>
         {user?.role === "RECRUITER"
           ? "Tools for Hiring"
@@ -84,8 +84,10 @@ export default function Features({ user }: FeaturesProps) {
         {featuresToDisplay.map((feature, idx) => (
           <Card key={idx} className="h-full">
             <CardHeader>
-              <CardTitle className="mb-2">{feature.icon}</CardTitle>
-              <CardTitle className="text-lg">{feature.title}</CardTitle>
+              <CardTitle className="md:mb-2">{feature.icon}</CardTitle>
+              <CardTitle className="text-lg -mb-2 lg:mb-0">
+                {feature.title}
+              </CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
               {feature.description}
