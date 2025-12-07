@@ -138,10 +138,10 @@ export default function CreateCompanyForm() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild className="w-full">
+      <DialogTrigger asChild>
         <Button className="w-full">Start New Company Setup</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-center text-xl">
             Company Setup

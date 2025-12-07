@@ -1,5 +1,6 @@
+import { getLoggedInUser } from "@/app/actions/auth.actions";
 import CreateCompanyForm from "@/components/forms/CreateCompanyForm";
-import { Button } from "@/components/ui/button";
+import LinkToCompany from "@/components/forms/LinkToCompany";
 import {
   Card,
   CardContent,
@@ -8,10 +9,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { redirect } from "next/navigation";
 
-export default function CompanySetup() {
+export default async function CompanySetup() {
+  const userResponse = await getLoggedInUser();
+  const user = userResponse.data;
+
+  if (user?.companyId) {
+    return redirect("/recruiter/dashboard");
+  }
   return (
-    <main className="py-4 flex justify-center">
+    <main className="px-2 md:px-0 py-4 flex justify-center">
       <Card className="w-full max-w-lg shadow-lg">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center">
@@ -56,7 +64,7 @@ export default function CompanySetup() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full">Request Access</Button>
+                <LinkToCompany />
               </CardContent>
             </Card>
           </div>

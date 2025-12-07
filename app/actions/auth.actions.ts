@@ -11,6 +11,7 @@ import { User } from "@/models/User";
 import { AppResponse } from "@/types/response";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { cache } from "react";
 
 export async function registerUser(
@@ -180,3 +181,9 @@ export const getLoggedInUser = cache(async () => {
     };
   }
 });
+
+export async function userLogout() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session_id");
+  redirect("/login");
+}

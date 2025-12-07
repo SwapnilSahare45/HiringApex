@@ -8,6 +8,8 @@ import { Company } from "@/models/Company";
 import cloudinary from "@/lib/cloudinary";
 import { User } from "@/models/User";
 import { revalidatePath } from "next/cache";
+import { PostJobSchemaType } from "@/lib/zodSchema/jobSchema";
+import { Job } from "@/models/Job";
 
 async function bufferToDataUrl(file: File): Promise<string> {
   const fileBuffer = await file.arrayBuffer();
@@ -87,6 +89,69 @@ export async function addCompany(
     };
   } catch (error) {
     console.log("Error while creating company: ", error);
+    return {
+      success: false,
+      error: "Something went wrong. Please try again.",
+    };
+  }
+}
+
+export async function getCompanies() {
+  const companies = await Company.find().select("_id name").lean();
+  return companies.map((company: any) => ({
+    _id: company._id.toString(),
+    name: company.name,
+  }));
+}
+
+export async function postJob(
+  _: AppResponse,
+  jobData: PostJobSchemaType
+): Promise<AppResponse> {
+  try {
+    await connectDB();
+    const userResponse = await getLoggedInUser();
+    if (!userResponse.success || userResponse.data.role !== "RECRUITER") {
+      return {
+        success: false,
+        error: "Unauthorize. You don't have an access.",
+      };
+    }
+    const recruiterId = userResponse.data._id;
+    const companyId = userResponse.data.companyId;
+    if (!companyId) {
+      return {
+        success: false,
+        error: "You need to be associated with a company to post jobs.",
+      };
+    }
+
+    const newJob = await Job.create({
+      ...jobData,
+      postedById: recruiterId,
+      companyId: companyId,
+      salaryMin: jobData.salaryMin ? parseFloat(jobData.salaryMin) : undefined,
+      salaryMax: jobData.salaryMax ? parseFloat(jobData.salaryMax) : undefined,
+      requiredSkills: jobData.requiredSkills
+        ? jobData.requiredSkills.split(",").map((skill) => skill.trim())
+        : [],
+    });
+
+    if (!newJob) {
+      return {
+        success: false,
+        error: "Failed to create job posting.",
+      };
+    }
+
+    revalidatePath("/recruiter/jobs");
+
+    return {
+      success: true,
+      message: "Job posted successfully.",
+    };
+  } catch (error) {
+    console.log("Error while posting job : ", error);
     return {
       success: false,
       error: "Something went wrong. Please try again.",

@@ -3,9 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Bell, Menu, User } from "lucide-react";
+import { Bell, LogOut, User } from "lucide-react";
 import { LoggedInUser } from "@/types/loggedInUser";
-import { getLoggedInUser } from "@/app/actions/auth.actions";
+import { getLoggedInUser, userLogout } from "@/app/actions/auth.actions";
+import MobileNavbar from "./MobileNavbar";
 
 export default async function Navbar() {
   const userResponse = await getLoggedInUser();
@@ -42,25 +43,38 @@ export default async function Navbar() {
         <Input type="text" placeholder="Search jobs..." />
       </div>
 
-      {user && <Bell className="hidden md:flex" />}
+      {user && (
+        <Link href="/notifications">
+          <Bell className="hidden md:flex" />
+        </Link>
+      )}
 
       <div className="hidden justify-center items-center gap-2 md:flex">
         {user ? (
-          <Button asChild size="icon" variant="outline">
-            <Link href={profilePath}>
-              {user.avatar ? (
-                <Image
-                  src={user.avatar}
-                  alt={`${user.name}'s avatar`}
-                  width={36}
-                  height={36}
-                  className="object-cover rounded-md"
-                />
-              ) : (
-                <User />
-              )}
-            </Link>
-          </Button>
+          <>
+            <Button asChild size="icon" variant="outline">
+              <Link href={profilePath}>
+                {user.avatar ? (
+                  <Image
+                    src={user.avatar}
+                    alt={`${user.name}'s avatar`}
+                    width={36}
+                    height={36}
+                    className="object-cover rounded-md"
+                  />
+                ) : (
+                  <User />
+                )}
+              </Link>
+            </Button>
+
+            <form action={userLogout}>
+              <Button className="flex items-center gap-2">
+                <LogOut />
+                <span>Logout</span>
+              </Button>
+            </form>
+          </>
         ) : (
           <>
             <Button asChild variant="outline">
@@ -75,9 +89,7 @@ export default async function Navbar() {
         <ModeToggle />
       </div>
 
-      <Button variant="ghost" size="icon" className="md:hidden">
-        <Menu className="min-w-6 min-h-6" />
-      </Button>
+      <MobileNavbar user={user} profilePath={profilePath} />
     </nav>
   );
 }
