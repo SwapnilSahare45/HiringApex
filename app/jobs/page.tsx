@@ -1,9 +1,9 @@
 import Filters from "@/components/jobs/Filters";
-import JobCard from "@/components/jobs/JobCard";
 import SearchInput from "@/components/jobs/SearchInput";
 import { TypographyH1 } from "@/components/ui/typography";
 import { getJobs } from "../actions/jobs.action";
 import { JobResponseType } from "@/types/Job";
+import JobDetails from "@/components/jobs/JobDetails";
 
 export default async function Jobs() {
   const jobResponse = await getJobs();
@@ -22,7 +22,7 @@ export default async function Jobs() {
         Showing {jobs.length} of {total} jobs
       </div>
 
-      <JobCard jobs={jobs} />
+      <JobDetails jobs={jobs} />
     </main>
   );
 }
