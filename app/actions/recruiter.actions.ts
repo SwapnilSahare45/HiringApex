@@ -158,3 +158,37 @@ export async function postJob(
     };
   }
 }
+
+export async function getRecruiterJobs() {
+  await connectDB();
+
+  const userResponse = await getLoggedInUser();
+  if (!userResponse.success || userResponse.data.role !== "RECRUITER") {
+    return {
+      success: false,
+      error: "Unauthorize. You don't have an access.",
+    };
+  }
+  const userId = userResponse.data._id;
+  const [jobs, total] = await Promise.all([
+    (Job || Company)
+      .find({ postedById: userId })
+      .populate(
+        "companyId",
+        "-adminRecruiterId -recruiterIds -verificationNotes"
+      )
+      .populate("postedById", "name")
+      .limit(10)
+      .exec(),
+    Job.countDocuments({ postedById: userId }),
+  ]);
+
+  const mappedJobs = jobs.map((job: any) => ({
+    ...job._doc,
+    _id: job._id.toString(),
+  }));
+  return {
+    jobs: mappedJobs,
+    total: total,
+  };
+}

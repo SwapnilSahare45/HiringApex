@@ -26,7 +26,7 @@ interface JobCardProps {
 
 export default function JobCard({ job }: JobCardProps) {
   return (
-    <Card>
+    <Card className="mb-2">
       <CardContent className="flex items-center gap-24">
         <div className="bg-gray-500 ml-12 p-4 rounded-md">
           {job.companyId.companyLogo ? (

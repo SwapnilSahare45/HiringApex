@@ -42,6 +42,10 @@ export const postJobSchema = z
       .string()
       .max(10000)
       .nonempty({ message: "Job description is required" }),
+    requirements: z
+      .string()
+      .max(10000)
+      .nonempty({ message: "Job requirements is required." }),
   })
   .refine(
     (data) => {

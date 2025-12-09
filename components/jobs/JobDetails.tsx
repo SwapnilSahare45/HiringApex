@@ -17,12 +17,7 @@ import {
   ExternalLink,
   MapPin,
 } from "lucide-react";
-import {
-  TypographyH2,
-  TypographyH4,
-  TypographyList,
-  TypographyP,
-} from "../ui/typography";
+import { TypographyH4, TypographyList, TypographyP } from "../ui/typography";
 
 interface JobDetailsProps {
   jobs: JobResponseType[];

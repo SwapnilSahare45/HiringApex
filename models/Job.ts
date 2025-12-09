@@ -48,6 +48,10 @@ const jobSchema = new mongoose.Schema(
       maxlength: 10000,
       index: true,
     },
+    requirements: {
+      type: String,
+      required: true,
+    },
     industry: {
       type: String,
       required: true,
@@ -84,8 +88,17 @@ const jobSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Open", "Closed", "Paused"],
-      default: "Open",
+      enum: ["Active", "Closed", "Paused", "Draft"],
+      default: "Draft",
+    },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    applicants: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
     },
   },
   {

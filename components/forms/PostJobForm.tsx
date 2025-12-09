@@ -46,20 +46,22 @@ export default function PostJobForm() {
       salaryMax: undefined,
       experienceLevel: "Fresher",
       educationRequired: "None",
-      vacancies: 1,
+      vacancies: undefined,
       applicationDeadline: undefined,
       requiredSkills: "",
       description: "",
+      requirements: "",
     },
   });
 
   useEffect(() => {
     if (state.success) {
       toast.success(state.message);
+      form.reset();
     } else if (state.error) {
       toast.error(state.error);
     }
-  }, [state]);
+  }, [state, form]);
 
   const locationType = form.watch("locationType");
 
@@ -287,7 +289,7 @@ export default function PostJobForm() {
                   <FormItem>
                     <FormLabel>Vacancies</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 5" {...field} />
+                      <Input type="number" placeholder="e.g., 5" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -343,6 +345,24 @@ export default function PostJobForm() {
                     <Textarea
                       rows={6}
                       placeholder="Describe the role, responsibilities, and company culture."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="requirements"
+              render={({ field }) => (
+                <FormItem className="mt-4">
+                  <FormLabel>Job Requirements</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      rows={6}
+                      placeholder="Describe the job requirements"
                       {...field}
                     />
                   </FormControl>
