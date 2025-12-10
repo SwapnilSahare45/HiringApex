@@ -29,12 +29,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { addExperience } from "@/app/actions/seeker.actions";
 import { toast } from "sonner";
+import { Textarea } from "../ui/textarea";
 
-interface AddExperienceProps {
-  userId: string;
-}
-
-export default function AddExperience({ userId }: AddExperienceProps) {
+export default function AddExperience() {
   const [open, setOpen] = useState(false);
 
   const [state, formAction, isPending] = useActionState(addExperience, {
@@ -45,7 +42,6 @@ export default function AddExperience({ userId }: AddExperienceProps) {
   const form = useForm<experienceSchemaType>({
     resolver: zodResolver(experienceSchema),
     defaultValues: {
-      userId: userId,
       title: "",
       company: "",
       location: "",
@@ -86,8 +82,6 @@ export default function AddExperience({ userId }: AddExperienceProps) {
         <DialogTitle>Add Experience</DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input type="hidden" name="userId" defaultValue={userId} />
-
             <FormField
               control={form.control}
               name="title"
@@ -95,7 +89,10 @@ export default function AddExperience({ userId }: AddExperienceProps) {
                 <FormItem>
                   <FormLabel>Job Title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="e.g., Senior Software Engineer"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -109,7 +106,7 @@ export default function AddExperience({ userId }: AddExperienceProps) {
                 <FormItem>
                   <FormLabel>Company Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="e.g., Hiring Apex" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,7 +120,7 @@ export default function AddExperience({ userId }: AddExperienceProps) {
                 <FormItem>
                   <FormLabel>Location</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="e.g., Pune, India" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -207,7 +204,11 @@ export default function AddExperience({ userId }: AddExperienceProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Textarea
+                      rows={6}
+                      placeholder="Describe your key responsibilities, achievements, and projects in this role."
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

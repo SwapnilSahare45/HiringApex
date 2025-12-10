@@ -9,7 +9,6 @@ import {
   TypographyList,
   TypographyMuted,
 } from "@/components/ui/typography";
-import { LoggedInUser } from "@/types/loggedInUser";
 import {
   CalendarDays,
   Code2,
@@ -19,12 +18,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-interface ProjectCardProps {
-  user: LoggedInUser;
-}
-
-export default async function ProjectCard({ user }: ProjectCardProps) {
-  const projects = await getProjects(user._id);
+export default async function ProjectCard() {
+  const projects = (await getProjects()) as any[];
   const hasProject = projects && projects.length > 0;
 
   const dateOptions: Intl.DateTimeFormatOptions = {
@@ -39,7 +34,7 @@ export default async function ProjectCard({ user }: ProjectCardProps) {
           <CardTitle className="text-xl font-bold">Project</CardTitle>
         </div>
 
-        <AddProject userId={user._id} />
+        <AddProject />
       </CardHeader>
       <Separator />
       <CardContent>

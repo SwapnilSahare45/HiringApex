@@ -44,7 +44,6 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 export const editSeekerProfileSchema = z.object({
-  id: z.string(),
   avatar: z
     .any()
     .optional()
@@ -76,7 +75,6 @@ export type editSeekerProfileSchemaType = z.infer<
 
 export const experienceSchema = z
   .object({
-    userId: z.string(),
     title: z.string().min(1, {
       message: "Job title cannot be empty.",
     }),
@@ -108,7 +106,6 @@ export type experienceSchemaType = z.infer<typeof experienceSchema>;
 
 export const projectSchema = z
   .object({
-    userId: z.string(),
     title: z.string().min(1, {
       message: "Job title cannot be empty.",
     }),
@@ -148,7 +145,6 @@ export type projectSchemaType = z.infer<typeof projectSchema>;
 
 export const educationSchema = z
   .object({
-    userId: z.string(),
     institution: z.string().min(1, {
       message: "Institution name is required.",
     }),

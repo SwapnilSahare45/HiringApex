@@ -3,15 +3,10 @@ import AddSkills from "@/components/forms/AddSkills";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { TypographyH3, TypographyMuted } from "@/components/ui/typography";
-import { LoggedInUser } from "@/types/loggedInUser";
 import { Brain, Zap } from "lucide-react";
 
-interface SkillsCardProps {
-  user: LoggedInUser;
-}
-
-export default async function SkillsCard({ user }: SkillsCardProps) {
-  const skills = await getSkills(user._id);
+export default async function SkillsCard() {
+  const skills = (await getSkills()) as string[];
   const hasSkills = skills && skills.length > 0;
   return (
     <Card className="w-full lg:w-4/5">
@@ -20,7 +15,7 @@ export default async function SkillsCard({ user }: SkillsCardProps) {
           <Brain className="w-6 h-6" />
           <CardTitle className="text-xl font-bold">Skills</CardTitle>
         </div>
-        <AddSkills userId={user._id} prevSkills={skills} />
+        <AddSkills prevSkills={skills} />
       </CardHeader>
       <Separator />
       <CardContent>

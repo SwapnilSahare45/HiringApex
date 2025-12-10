@@ -21,11 +21,10 @@ import { toast } from "sonner";
 import { addSkills } from "@/app/actions/seeker.actions";
 
 interface AddSkillsProps {
-  userId: string;
   prevSkills: string[];
 }
 
-export default function AddSkills({ userId, prevSkills }: AddSkillsProps) {
+export default function AddSkills({ prevSkills }: AddSkillsProps) {
   const [skills, setSkills] = useState<string[]>(prevSkills || []);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,8 +60,6 @@ export default function AddSkills({ userId, prevSkills }: AddSkillsProps) {
     const formData = new FormData();
 
     formData.append("skills", skills.join(","));
-
-    formData.append("userId", userId);
 
     startTransition(() => {
       action(formData);

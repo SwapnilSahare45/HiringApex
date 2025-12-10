@@ -29,12 +29,9 @@ import { addEducation } from "@/app/actions/seeker.actions";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Checkbox } from "../ui/checkbox";
+import { Textarea } from "../ui/textarea";
 
-interface AddEducationProps {
-  userId: string;
-}
-
-export default function AddEducation({ userId }: AddEducationProps) {
+export default function AddEducation() {
   const [open, setOpen] = useState(false);
 
   const [state, formAction, isPending] = useActionState(addEducation, {
@@ -45,7 +42,6 @@ export default function AddEducation({ userId }: AddEducationProps) {
   const form = useForm<EducationSchemaType>({
     resolver: zodResolver(educationSchema),
     defaultValues: {
-      userId: userId,
       institution: "",
       degree: "",
       isCurrent: false,
@@ -85,8 +81,6 @@ export default function AddEducation({ userId }: AddEducationProps) {
         <DialogTitle>Add Education</DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input type="hidden" name="userId" defaultValue={userId} />
-
             <FormField
               control={form.control}
               name="degree"
@@ -94,7 +88,7 @@ export default function AddEducation({ userId }: AddEducationProps) {
                 <FormItem>
                   <FormLabel>Degree</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="e.g., MCA" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -108,7 +102,10 @@ export default function AddEducation({ userId }: AddEducationProps) {
                 <FormItem>
                   <FormLabel>Institution</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="Enter your college/institut name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -192,7 +189,10 @@ export default function AddEducation({ userId }: AddEducationProps) {
                 <FormItem>
                   <FormLabel>Grade</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="e.g., 3.9/4.0, 9.2/10 or 92%"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -206,7 +206,11 @@ export default function AddEducation({ userId }: AddEducationProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Textarea
+                      rows={6}
+                      placeholder="List relevant coursework, major projects, thesis title, or academic honors achieved."
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

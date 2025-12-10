@@ -46,7 +46,6 @@ export default function EditSeekerProfile({ user }: EditSeekerProfileProps) {
   const form = useForm<editSeekerProfileSchemaType>({
     resolver: zodResolver(editSeekerProfileSchema),
     defaultValues: {
-      id: user?._id || "",
       name: user?.name || "",
       email: user?.email || "",
       headline: user?.headline || "",
@@ -59,7 +58,6 @@ export default function EditSeekerProfile({ user }: EditSeekerProfileProps) {
   useEffect(() => {
     if (user) {
       form.reset({
-        id: user?._id || "",
         name: user?.name || "",
         email: user?.email || "",
         headline: user?.headline || "",
@@ -114,7 +112,6 @@ export default function EditSeekerProfile({ user }: EditSeekerProfileProps) {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input type="hidden" name="id" defaultValue={user._id} />
             <FormField
               control={form.control}
               name="avatar"

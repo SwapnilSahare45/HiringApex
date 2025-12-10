@@ -12,15 +12,15 @@ export default async function Profile() {
   const userResponse = await getLoggedInUser();
   const user = userResponse.data as LoggedInUser;
 
-  const resume = await getResume(user._id);
+  const resume = await getResume();
   return (
     <main className="w-full flex flex-col items-center gap-2 md:gap-6 lg:gap-8 px-2 md:px-6 lg:px-0 py-2 md:py-6 lg:py-8">
       <ProfileCard user={user} />
-      <SkillsCard user={user} />
-      <ExperienceCard user={user} />
-      <ProjectCard user={user} />
-      <ResumeCard user={user} resume={resume} />
-      <EducationCard user={user} />
+      <SkillsCard />
+      <ExperienceCard />
+      <ProjectCard />
+      <ResumeCard resume={resume} />
+      <EducationCard />
     </main>
   );
 }

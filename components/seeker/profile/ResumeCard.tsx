@@ -11,17 +11,15 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
-import { LoggedInUser } from "@/types/loggedInUser";
 import { FileText } from "lucide-react";
 import { useActionState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 interface ResumeCardProps {
-  user: LoggedInUser;
   resume: string;
 }
 
-export default function ResumeCard({ user, resume }: ResumeCardProps) {
+export default function ResumeCard({ resume }: ResumeCardProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -73,7 +71,6 @@ export default function ResumeCard({ user, resume }: ResumeCardProps) {
       </EmptyHeader>
       <EmptyContent>
         <form action={action} ref={formRef}>
-          <Input type="hidden" name="id" value={user._id} />
           <Input
             type="file"
             name="resumeFile"

@@ -16,6 +16,7 @@ import { Skills } from "@/models/Skills";
 import { User } from "@/models/User";
 import { AppResponse } from "@/types/response";
 import { revalidatePath } from "next/cache";
+import { getLoggedInUser } from "./auth.actions";
 
 async function bufferToDataUrl(file: File): Promise<string> {
   const fileBuffer = await file.arrayBuffer();
@@ -27,12 +28,21 @@ export async function editSeekerProfile(
   _: AppResponse,
   data: editSeekerProfileSchemaType
 ): Promise<AppResponse> {
-  console.log(data);
   try {
     await connectDB();
 
-    const user = await User.findById(data.id).select("-password -__v");
-    if (!user) {
+    const userResponse = await getLoggedInUser();
+    if (!userResponse.success || userResponse.data.role !== "SEEKER") {
+      return {
+        success: false,
+        error: "Unauthorize. You don't have an access.",
+      };
+    }
+
+    const user = await User.findById(userResponse.data._id).select(
+      "-password -__v"
+    );
+    if (!user && user.role !== "SEEKER") {
       return {
         success: false,
         error: "User not found.",
@@ -82,8 +92,11 @@ export async function uploadResume(
   try {
     const data = Object.fromEntries(formData);
     await connectDB();
-    const user = await User.findById(data.id).select("id");
-    if (!user) {
+    const userResponse = await getLoggedInUser();
+    const user = await User.findById(userResponse.data._id).select(
+      "-password, -__v"
+    );
+    if (!user && user.role !== "SEEKER") {
       return {
         success: false,
         error: "User not found",
@@ -133,8 +146,16 @@ export async function uploadResume(
   }
 }
 
-export async function getResume(userId: string) {
-  const response = await Resume.findOne({ user: userId });
+export async function getResume() {
+  await connectDB();
+  const userResponse = await getLoggedInUser();
+  if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+    return {
+      success: false,
+      error: "Unauthorize. You don't have an access.",
+    };
+  }
+  const response = await Resume.findOne({ user: userResponse.data._id });
   return response?.resumeFile;
 }
 
@@ -143,7 +164,7 @@ export async function addSkills(
   formData: FormData
 ): Promise<AppResponse> {
   const data = Object.fromEntries(formData);
-  const { userId, skills } = data;
+  const { skills } = data;
 
   const skillsString = skills && typeof skills === "string" ? skills : "";
   const skillsArray = skillsString
@@ -154,9 +175,15 @@ export async function addSkills(
     : [];
   try {
     await connectDB();
-
+    const userResponse = await getLoggedInUser();
+    if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+      return {
+        success: false,
+        error: "Unauthorize. You don't have an access.",
+      };
+    }
     const updatedSkills = await Skills.findOneAndUpdate(
-      { userId: userId },
+      { userId: userResponse.data._id },
       { $set: { skills: skillsArray } },
       {
         new: true,
@@ -190,9 +217,16 @@ interface SkillsProjection {
   skills: string[];
 }
 
-export async function getSkills(userId: string) {
+export async function getSkills() {
   await connectDB();
-  const userSkills = (await Skills.findOne({ userId })
+  const userResponse = await getLoggedInUser();
+  if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+    return {
+      success: false,
+      error: "Unauthorize. You don't have an access.",
+    };
+  }
+  const userSkills = (await Skills.findOne({ userId: userResponse.data._id })
     .select("skills -_id")
     .lean()) as SkillsProjection | null;
   if (!userSkills) return [];
@@ -204,8 +238,16 @@ export async function addExperience(
   data: experienceSchemaType
 ): Promise<AppResponse> {
   try {
+    await connectDB();
+    const userResponse = await getLoggedInUser();
+    if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+      return {
+        success: false,
+        error: "Unauthorize. You don't have an access.",
+      };
+    }
     const newExperience = await Experience.create({
-      userId: data.userId,
+      userId: userResponse.data._id,
       title: data.title,
       company: data.company,
       location: data.location,
@@ -237,8 +279,18 @@ export async function addExperience(
   }
 }
 
-export async function getExperiences(userId: string) {
-  const experiences = await Experience.find({ userId }).lean();
+export async function getExperiences() {
+  await connectDB();
+  const userResponse = await getLoggedInUser();
+  if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+    return {
+      success: false,
+      error: "Unauthorize. You don't have an access.",
+    };
+  }
+  const experiences = await Experience.find({
+    userId: userResponse.data._id,
+  }).lean();
   return experiences.map((exp: any) => ({
     ...exp,
     _id: exp._id.toString(),
@@ -253,8 +305,16 @@ export async function addProject(
   data: projectSchemaType
 ): Promise<AppResponse> {
   try {
+    await connectDB();
+    const userResponse = await getLoggedInUser();
+    if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+      return {
+        success: false,
+        error: "Unauthorize. You don't have an access.",
+      };
+    }
     const newProject = await Project.create({
-      userId: data.userId,
+      userId: userResponse.data._id,
       title: data.title,
       startDate: data.startDate,
       endDate: data.endDate,
@@ -285,8 +345,16 @@ export async function addProject(
   }
 }
 
-export async function getProjects(userId: string) {
-  const projects = await Project.find({ userId }).lean();
+export async function getProjects() {
+  await connectDB();
+  const userResponse = await getLoggedInUser();
+  if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+    return {
+      success: false,
+      error: "Unauthorize. You don't have an access.",
+    };
+  }
+  const projects = await Project.find({ userId: userResponse.data._id }).lean();
   return projects.map((project: any) => ({
     ...project,
     _id: project._id.toString(),
@@ -301,8 +369,16 @@ export async function addEducation(
   data: EducationSchemaType
 ): Promise<AppResponse> {
   try {
+    await connectDB();
+    const userResponse = await getLoggedInUser();
+    if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+      return {
+        success: false,
+        error: "Unauthorize. You don't have an access.",
+      };
+    }
     const newEducation = await Education.create({
-      userId: data.userId,
+      userId: userResponse.data._id,
       institution: data.institution,
       degree: data.degree,
       isCurrent: data.isCurrent,
@@ -334,8 +410,18 @@ export async function addEducation(
   }
 }
 
-export async function getEducations(userId: string) {
-  const educations = await Education.find({ userId }).lean();
+export async function getEducations() {
+  await connectDB();
+  const userResponse = await getLoggedInUser();
+  if (!userResponse.success && userResponse.data.role !== "SEEKER") {
+    return {
+      success: false,
+      error: "Unauthorize. You don't have an access.",
+    };
+  }
+  const educations = await Education.find({
+    userId: userResponse.data._id,
+  }).lean();
   return educations.map((education: any) => ({
     ...education,
     _id: education._id.toString(),

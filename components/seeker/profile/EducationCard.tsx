@@ -9,15 +9,10 @@ import {
   TypographyMuted,
   TypographyP,
 } from "@/components/ui/typography";
-import { LoggedInUser } from "@/types/loggedInUser";
 import { CalendarDays, GraduationCap, Pencil } from "lucide-react";
 
-interface EducationCardProps {
-  user: LoggedInUser;
-}
-
-export default async function EducationCard({ user }: EducationCardProps) {
-  const educations = await getEducations(user._id);
+export default async function EducationCard() {
+  const educations = (await getEducations()) as any[];
   const hasEducation = educations && educations.length > 0;
   const dateOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
@@ -31,7 +26,7 @@ export default async function EducationCard({ user }: EducationCardProps) {
           <CardTitle className="text-xl font-bold">Education</CardTitle>
         </div>
 
-        <AddEducation userId={user._id} />
+        <AddEducation />
       </CardHeader>
       <Separator />
       <CardContent>

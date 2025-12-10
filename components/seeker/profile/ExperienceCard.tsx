@@ -10,7 +10,6 @@ import {
   TypographyMuted,
   TypographyP,
 } from "@/components/ui/typography";
-import { LoggedInUser } from "@/types/loggedInUser";
 import {
   BriefcaseBusiness,
   Building2,
@@ -19,12 +18,8 @@ import {
   Pencil,
 } from "lucide-react";
 
-interface ExperienceCardProps {
-  user: LoggedInUser;
-}
-
-export default async function ExperienceCard({ user }: ExperienceCardProps) {
-  const experiences = await getExperiences(user?._id);
+export default async function ExperienceCard() {
+  const experiences = (await getExperiences()) as any[];
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     year: "numeric",
@@ -40,7 +35,7 @@ export default async function ExperienceCard({ user }: ExperienceCardProps) {
           <BriefcaseBusiness className="w-6 h-6" />
           <CardTitle className="text-xl font-bold">Experience</CardTitle>
         </div>
-        <AddExperience userId={user._id} />
+        <AddExperience />
       </CardHeader>
       <Separator />
       <CardContent>

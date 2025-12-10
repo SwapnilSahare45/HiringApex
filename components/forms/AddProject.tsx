@@ -25,12 +25,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { addProject } from "@/app/actions/seeker.actions";
 import { toast } from "sonner";
+import { Textarea } from "../ui/textarea";
 
-interface AddProjectProps {
-  userId: string;
-}
-
-export default function AddProject({ userId }: AddProjectProps) {
+export default function AddProject() {
   const [open, setOpen] = useState(false);
 
   const [state, formAction, isPending] = useActionState(addProject, {
@@ -41,7 +38,6 @@ export default function AddProject({ userId }: AddProjectProps) {
   const form = useForm<projectSchemaType>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
-      userId: userId,
       title: "",
       startDate: undefined,
       endDate: undefined,
@@ -78,8 +74,6 @@ export default function AddProject({ userId }: AddProjectProps) {
         <DialogTitle>Add Project</DialogTitle>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <Input type="hidden" name="userId" defaultValue={userId} />
-
             <FormField
               control={form.control}
               name="title"
@@ -87,7 +81,10 @@ export default function AddProject({ userId }: AddProjectProps) {
                 <FormItem>
                   <FormLabel>Project title</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="e.g., Artora (Art Auction Platform)"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -153,7 +150,11 @@ export default function AddProject({ userId }: AddProjectProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Textarea
+                      rows={6}
+                      placeholder="Briefly explain the project's goal, the technologies used, and your specific outcomes or impact."
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -167,7 +168,10 @@ export default function AddProject({ userId }: AddProjectProps) {
                 <FormItem>
                   <FormLabel>Project Live URL</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="e.g., https://myproject.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -181,7 +185,10 @@ export default function AddProject({ userId }: AddProjectProps) {
                 <FormItem>
                   <FormLabel>Project GitHub URL</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="e.g., https://github.com/myprojectrepo"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
