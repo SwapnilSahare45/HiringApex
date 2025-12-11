@@ -8,8 +8,8 @@ import { Company } from "@/models/Company";
 import cloudinary from "@/lib/cloudinary";
 import { User } from "@/models/User";
 import { revalidatePath } from "next/cache";
-import { PostJobSchemaType } from "@/lib/zodSchema/jobSchema";
 import { Job } from "@/models/Job";
+import { postJobSchemaType } from "@/lib/zodSchema/jobSchema";
 
 async function bufferToDataUrl(file: File): Promise<string> {
   const fileBuffer = await file.arrayBuffer();
@@ -106,7 +106,7 @@ export async function getCompanies() {
 
 export async function postJob(
   _: AppResponse,
-  jobData: PostJobSchemaType
+  jobData: postJobSchemaType
 ): Promise<AppResponse> {
   try {
     await connectDB();
@@ -125,26 +125,23 @@ export async function postJob(
         error: "You need to be associated with a company to post jobs.",
       };
     }
-
-    const newJob = await Job.create({
+    const salaryMin = jobData.salaryMin?.toString();
+    const salaryMax = jobData.salaryMin?.toString();
+    const salaryCurrency = jobData.salaryCurrency;
+    const salaryRange = `${salaryMin} - ${salaryMax} ${salaryCurrency}`;
+    const newJob = Job.create({
       ...jobData,
-      postedById: recruiterId,
       companyId: companyId,
-      salaryMin: jobData.salaryMin ? parseFloat(jobData.salaryMin) : undefined,
-      salaryMax: jobData.salaryMax ? parseFloat(jobData.salaryMax) : undefined,
-      requiredSkills: jobData.requiredSkills
-        ? jobData.requiredSkills.split(",").map((skill) => skill.trim())
-        : [],
+      postedById: recruiterId,
+      salaryRange: salaryRange,
     });
 
     if (!newJob) {
       return {
         success: false,
-        error: "Failed to create job posting.",
+        error: "Error while posting a job. Please try again.",
       };
     }
-
-    revalidatePath("/recruiter/jobs");
 
     return {
       success: true,

@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema(
   {
+    title: {
+      type: String,
+      trim: true,
+      required: true,
+      index: true,
+    },
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
@@ -12,84 +18,80 @@ const jobSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    title: {
+    industry: {
       type: String,
       trim: true,
       required: true,
-      index: true,
+    },
+    experienceLevel: {
+      type: String,
+      enum: [
+        "Internship",
+        "Entry Level",
+        "Mid-Level",
+        "Senior",
+        "Lead",
+        "Manager",
+        "Director",
+        "Executive",
+      ],
+      required: true,
     },
     employmentType: {
       type: String,
       enum: ["Full-time", "Part-time", "Contract", "Temporary", "Internship"],
       required: true,
     },
+    positions: {
+      type: Number,
+    },
+    deadline: {
+      type: Date,
+    },
     locationType: {
       type: String,
       enum: ["On-site", "Remote", "Hybrid"],
+      default: "On-site",
+    },
+    location: {
+      type: String,
+      trim: true,
       required: true,
     },
-    city: {
+    salaryRange: {
       type: String,
-      required: function () {
-        return this.locationType !== "Remote";
-      },
-    },
-    salaryMin: {
-      type: Number,
-      min: 0,
-    },
-    salaryMax: {
-      type: Number,
-      min: 0,
+      trim: true,
     },
     description: {
       type: String,
+      trim: true,
       required: true,
+      minlenght: 100,
       maxlength: 10000,
-      index: true,
     },
-    requirements: {
-      type: String,
-      required: true,
-    },
-    industry: {
-      type: String,
-      required: true,
-    },
-    experienceLevel: {
-      type: String,
-      enum: ["Fresher", "Associate", "Senior", "Lead", "Director", "Executive"],
-      required: true,
-    },
-    requiredSkills: {
+    responsibilities: {
       type: [String],
-      default: [],
-      index: true,
+      required: true,
     },
-    educationRequired: {
+    requiredQualifications: {
+      type: [String],
+      required: true,
+    },
+    niceToHave: {
+      type: [String],
+    },
+    skills: {
+      type: [String],
+      required: true,
+    },
+    companyBenefits: {
+      type: [String],
+    },
+    applicationEmail: {
       type: String,
-      enum: [
-        "None",
-        "High School",
-        "Associate's Degree",
-        "Bachelor's Degree",
-        "Master's Degree",
-        "PhD",
-      ],
-      default: "None",
     },
-    applicationDeadline: {
-      type: Date,
-    },
-    vacancies: {
-      type: Number,
-      default: 1,
-      min: 1,
-    },
-    status: {
+    externalApplicationLink: {
       type: String,
-      enum: ["Active", "Closed", "Paused", "Draft"],
-      default: "Draft",
     },
     views: {
       type: Number,
