@@ -1,33 +1,38 @@
-import { LoggedInUser } from "./loggedInUser";
-
 export type JobResponseType = {
   _id: string;
-  companyId: {
-    _id: string;
-    name: string;
-    slug: string;
-    websiteUrl: string;
-    linkedinUrl: string;
-    companyLogo: string;
-    description: string;
-    industry: string;
-    size: string;
-    headquarters: string;
-    foundedYear: number;
-    createdAt: Date;
-  };
-  postedById: LoggedInUser;
+  companyName: string;
+  companyLogo: string;
   title: string;
-  employmentType: string;
-  locationType: string;
-  city: string;
-  salaryMin: number;
-  salaryMax: number;
-  description: string;
   industry: string;
-  experienceLevel: string;
-  requiredSkills: string[];
-  vacancies: number;
-  status: string;
+  experienceLevel:
+    | "Internship"
+    | "Entry Level"
+    | "Mid-Level"
+    | "Senior"
+    | "Lead"
+    | "Manager"
+    | "Director"
+    | "Executive";
+  employmentType:
+    | "Full-time"
+    | "Part-time"
+    | "Contract"
+    | "Temporary"
+    | "Internship";
+  positions?: number;
+  deadline?: Date;
+  locationType: "On-site" | "Remote" | "Hybrid";
+  location: string;
+  salaryRange?: string;
+  description: string;
+  responsibilities: string[];
+  requiredQualifications: string[];
+  niceToHave?: string[];
+  skills: string[];
+  companyBenefits?: string[];
+  applicationEmail?: string;
+  externalApplicationLink?: string;
+  views: number;
+  applicants: string[];
   createdAt: Date;
 };

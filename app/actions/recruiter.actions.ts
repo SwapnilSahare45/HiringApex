@@ -128,7 +128,7 @@ export async function postJob(
     const salaryMin = jobData.salaryMin?.toString();
     const salaryMax = jobData.salaryMin?.toString();
     const salaryCurrency = jobData.salaryCurrency;
-    const salaryRange = `${salaryMin} - ${salaryMax} ${salaryCurrency}`;
+    const salaryRange = `${salaryCurrency} ${salaryMin} - ${salaryMax}`;
     const newJob = Job.create({
       ...jobData,
       companyId: companyId,

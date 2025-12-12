@@ -12,11 +12,13 @@ const jobSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
       required: true,
+      index: true,
     },
     postedById: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
     industry: {
       type: String,
@@ -110,5 +112,7 @@ const jobSchema = new mongoose.Schema(
     },
   }
 );
+
+jobSchema.index({ createdAt: -1 });
 
 export const Job = mongoose.models.Job || mongoose.model("Job", jobSchema);

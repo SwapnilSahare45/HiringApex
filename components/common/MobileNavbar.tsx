@@ -10,7 +10,13 @@ import {
   UserPlus,
 } from "lucide-react";
 import { Button } from "../ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { LoggedInUser } from "@/types/loggedInUser";
@@ -30,7 +36,8 @@ export default function MobileNavbar({ user, profilePath }: MobileNavbarProps) {
       </SheetTrigger>
 
       <SheetContent>
-        <SheetHeader className="-mb-6 pl-6">
+        <SheetHeader className="-mb-6 pl-6 flex flex-row items-center gap-12">
+          <SheetTitle>Menu</SheetTitle>
           <ModeToggle />
         </SheetHeader>
 
