@@ -8,15 +8,15 @@ import { JobResponseType } from "@/types/Job";
 import { Briefcase, Eye, Plus, Search, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
 
-interface JobRecruiterResponseType extends JobResponseType {
-  applicants: [];
-  views: 0;
-}
-
 export default async function Jobs() {
   const jobResponse = await getRecruiterJobs();
-  const jobs = jobResponse.jobs as JobRecruiterResponseType[];
+  const jobs = jobResponse.jobs as JobResponseType[];
   const total = jobResponse.total;
+  const totalApplicants = jobs.reduce(
+    (sum, job) => sum + (job.applicants.length || 0),
+    0
+  );
+  const totalViews = jobs.reduce((sum, job) => sum + (job.views || 0), 0);
   return (
     <main className="space-y-8 py-4">
       <div className="flex items-center justify-between md:px-12">
@@ -59,7 +59,7 @@ export default async function Jobs() {
             <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           }
           iconBG={"bg-purple-500/10"}
-          stats={1}
+          stats={totalApplicants}
           statHeading={"Total Applicants"}
         />
 
@@ -68,7 +68,7 @@ export default async function Jobs() {
             <Eye className="w-5 h-5 text-orange-600 dark:text-orange-400" />
           }
           iconBG={"bg-orange-600/10"}
-          stats={0}
+          stats={totalViews}
           statHeading={"Total Views"}
         />
       </div>
@@ -82,8 +82,6 @@ export default async function Jobs() {
         <Button>All Jobs</Button>
 
         <Button>Active</Button>
-
-        <Button>Paused</Button>
 
         <Button>Closed</Button>
 

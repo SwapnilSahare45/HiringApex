@@ -17,6 +17,7 @@ import { User } from "@/models/User";
 import { AppResponse } from "@/types/response";
 import { revalidatePath } from "next/cache";
 import { getLoggedInUser } from "./auth.actions";
+import { Job } from "@/models/Job";
 
 async function bufferToDataUrl(file: File): Promise<string> {
   const fileBuffer = await file.arrayBuffer();
@@ -429,4 +430,55 @@ export async function getEducations() {
     startDate: education.startDate.toISOString(),
     endDate: education.endDate ? education.endDate.toISOString() : null,
   }));
+}
+
+export async function applyForJob(jobId: string): Promise<AppResponse> {
+  try {
+    await connectDB();
+    const userResponse = await getLoggedInUser();
+    if (!userResponse.success || userResponse.data.role !== "SEEKER") {
+      return {
+        success: false,
+        error: "Unauthorize. You don't have an access.",
+      };
+    }
+
+    const existingJob = await Job.findOne({
+      _id: jobId,
+      applicants: userResponse.data._id,
+    });
+
+    if (existingJob) {
+      return {
+        success: false,
+        error: "You have already applied for this job.",
+      };
+    }
+
+    const updatedJob = await Job.findByIdAndUpdate(
+      jobId,
+      { $push: { applicants: userResponse.data._id } },
+      { new: true }
+    );
+
+    if (!updatedJob) {
+      return {
+        success: false,
+        error: "Failed to apply. Please try again later.",
+      };
+    }
+
+    revalidatePath(`/jobs/${jobId}`);
+
+    return {
+      success: true,
+      message: "Applied successfully!",
+    };
+  } catch (error) {
+    console.log("Error while applying for job: ", error);
+    return {
+      success: false,
+      error: "Something went wrong. Please try again.",
+    };
+  }
 }

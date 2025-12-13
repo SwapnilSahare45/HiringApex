@@ -32,6 +32,13 @@ export type JobResponseType = {
   companyBenefits?: string[];
   applicationEmail?: string;
   externalApplicationLink?: string;
+  status: "Active" | "Draft" | "Close";
+  appliedStatus:
+    | "Applied"
+    | "Under Review"
+    | "Shortlisted"
+    | "Offered"
+    | "Rejected";
   views: number;
   applicants: string[];
   createdAt: Date;

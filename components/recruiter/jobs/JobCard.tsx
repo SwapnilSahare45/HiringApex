@@ -23,13 +23,8 @@ import {
   X,
 } from "lucide-react";
 
-interface JobRecruiterResponseType extends JobResponseType {
-  applicants: [];
-  views: 0;
-}
-
 interface JobCardProps {
-  jobs: JobRecruiterResponseType[];
+  jobs: JobResponseType[];
 }
 
 export default function JobCard({ jobs }: JobCardProps) {
@@ -85,7 +80,7 @@ export default function JobCard({ jobs }: JobCardProps) {
                   {job.locationType === "Remote" ? (
                     <span>{job.locationType}</span>
                   ) : (
-                    <span>{job.city}</span>
+                    <span>{job.location}</span>
                   )}
                 </TypographyMuted>
               </li>
@@ -108,18 +103,16 @@ export default function JobCard({ jobs }: JobCardProps) {
                 </li>
               )}
 
-              {(job.salaryMin || job.salaryMax) && (
+              {job.salaryRange && (
                 <li className="font-semibold text-green-400 dark:text-green-600">
-                  {`₹${job.salaryMin}`}
-                  {job.salaryMin && job.salaryMax && " - "}
-                  {`₹${job.salaryMax}`} a year
+                  {job.salaryRange} a year
                 </li>
               )}
             </TypographyList>
 
-            {job.requiredSkills && job.requiredSkills.length > 0 && (
+            {job.skills && job.skills.length > 0 && (
               <div className="space-x-2">
-                {job.requiredSkills.map((skill, idx) => (
+                {job.skills.map((skill, idx) => (
                   <span
                     className="bg-gray-100 text-black px-3 py-1 rounded-xl"
                     key={idx}
@@ -138,14 +131,16 @@ export default function JobCard({ jobs }: JobCardProps) {
 
           <CardFooter className="space-x-2 -mt-2">
             <div className="flex flex-col items-center justify-center">
-              <p className="text-3xl font-semibold">{1}</p>
+              <p className="text-3xl font-semibold">
+                {job.applicants.length || 0}
+              </p>
               <p className="text-xs text-gray-600 dark:text-gray-400">
                 Applicants
               </p>
             </div>
 
             <div className="flex flex-col items-center justify-center">
-              <p className="text-3xl font-semibold">{job.views}</p>
+              <p className="text-3xl font-semibold">{job.views || 0}</p>
               <p className="text-xs text-gray-600 dark:text-gray-400">Views</p>
             </div>
 

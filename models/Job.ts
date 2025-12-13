@@ -95,6 +95,10 @@ const jobSchema = new mongoose.Schema(
     externalApplicationLink: {
       type: String,
     },
+    status: {
+      type: String,
+      enum: ["Active", "Draft", "Close"],
+    },
     views: {
       type: Number,
       default: 0,

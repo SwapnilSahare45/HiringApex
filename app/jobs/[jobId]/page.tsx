@@ -1,7 +1,11 @@
+import { getLoggedInUser } from "@/app/actions/auth.actions";
 import { getJob } from "@/app/actions/jobs.action";
+import { applyForJob } from "@/app/actions/seeker.actions";
+import ApplyJob from "@/components/seeker/job/ApplyJob";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
   TypographyH2,
@@ -35,6 +39,14 @@ export default async function Job({
   const { jobId } = await params;
   const jobResponse = await getJob(jobId);
   const job = jobResponse.job;
+
+  const userResponse = await getLoggedInUser();
+  const user = userResponse.data;
+  const userRole = user.role;
+
+  const hasApplied = job.applicants.some(
+    (applicantId: any) => applicantId.toString() === user._id.toString()
+  );
 
   const getLocationTypeStyle = (type: string) => {
     switch (type) {
@@ -252,9 +264,9 @@ export default async function Job({
             </div>
           )}
 
-          <Button size="lg" className="w-full">
-            Apply Now
-          </Button>
+          {user.role !== "RECRUITER" && (
+            <ApplyJob jobId={job._id} hasApplied={hasApplied} />
+          )}
 
           <div className="mt-6 space-y-2">
             {job.deadline && (
